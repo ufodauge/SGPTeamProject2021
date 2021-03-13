@@ -40,7 +40,6 @@ end
 
 function love.update(dt)
     -- debug
-    -- lurker.update()
     lovebird.update()
     debug:update(dt)
     -- debug

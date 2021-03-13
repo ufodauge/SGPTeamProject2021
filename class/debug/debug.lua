@@ -2,16 +2,14 @@
 -- Debug
 -- Q で表示および非表示を切り替え
 ---------------------------------------
-
 -- リファクタリングをしろ
-
 FrameCount = require 'class.debug.frame_count'
 FreeCamera = require 'class.debug.camera'
 
 local Debug = Class('Debug')
 
-local framecount_x, framecount_y = 800, 5
-local free_camera_x, free_camera_y = 800, 25
+local framecount_x, framecount_y = DEBUG_FRAMECOUNT_X, DEBUG_FRAMECOUNT_Y
+local free_camera_x, free_camera_y = DEBUG_FREECAMERA_X, DEBUG_FREECAMERA_Y
 
 -- local functions
 -- 影付きでテキスト出力
@@ -97,7 +95,7 @@ function Debug:init(valid)
     -- list:        選択肢のリスト
     -- frame_count: フレームカウント
     -- index:       選択中のインデックス
-    self.x, self.y = 20, 10
+    self.x, self.y = DEBUG_MENU_X, DEBUG_MENU_Y
     self.valid = valid
     self.active = false
 
@@ -116,16 +114,14 @@ function Debug:init(valid)
                             contents = function()
                                 self.toggle.frame_count = not self.toggle.frame_count
                             end
-                        },
-                        {
+                        }, {
                             attribute = 'file',
                             name = 'free_camera',
                             contents = function()
                                 -- self.toggle.free_camera = not self.toggle.free_camera
                                 self.free_camera:toggle()
                             end
-                        },
-                        {
+                        }, {
                             attribute = 'file',
                             name = 'return',
                             contents = function()
@@ -133,8 +129,7 @@ function Debug:init(valid)
                             end
                         }
                     }
-                },
-                {
+                }, {
                     attribute = 'dir',
                     name = 'framecount',
                     contents = {
@@ -144,22 +139,19 @@ function Debug:init(valid)
                             contents = function()
                                 self.frame_count:reset()
                             end
-                        },
-                        {
+                        }, {
                             attribute = 'file',
                             name = 'stop',
                             contents = function()
                                 self.frame_count:stop()
                             end
-                        },
-                        {
+                        }, {
                             attribute = 'file',
                             name = 'start',
                             contents = function()
                                 self.frame_count:start()
                             end
-                        },
-                        {
+                        }, {
                             attribute = 'file',
                             name = 'return',
                             contents = function()
@@ -167,20 +159,13 @@ function Debug:init(valid)
                             end
                         }
                     }
-                },
-                {
-                    attribute = 'dir',
-                    name = 'state',
-                    contents = {}
-                },
-                {
+                }, {attribute = 'dir', name = 'state', contents = {}}, {
                     attribute = 'file',
                     name = 'quit',
                     contents = function()
                         love.event.quit()
                     end
-                },
-                {
+                }, {
                     attribute = 'file',
                     name = 'return',
                     contents = function()
@@ -194,108 +179,92 @@ function Debug:init(valid)
     for i, content in ipairs(self.list[1].contents) do
         if content.name == 'state' then
             for j, state in pairs(States) do
-                table.insert(
-                    content.contents,
-                    {
-                        attribute = 'file',
-                        name = state.name,
-                        contents = function()
-                            -- if State.current() ~= state then
-                            -- else
-                            -- end
-                            State.switch(state)
-                        end
-                    }
-                )
-            end
-            table.insert(
-                content.contents,
-                {
+                table.insert(content.contents, {
                     attribute = 'file',
-                    name = 'return',
+                    name = state.name,
                     contents = function()
-                        move_path(self, '..')
+                        -- if State.current() ~= state then
+                        -- else
+                        -- end
+                        State.switch(state)
                     end
-                }
-            )
+                })
+            end
+            table.insert(content.contents, {
+                attribute = 'file',
+                name = 'return',
+                contents = function()
+                    move_path(self, '..')
+                end
+            })
         end
     end
 
-    self.toggle = {
-        frame_count = true
-    }
+    self.toggle = {frame_count = true}
 
-    self.path = {
-        'root',
-        1
-    }
+    self.path = {'root', 1}
 
     self.keys = KeyManager()
-    self.keys:register(
+    self.keys:register({
         {
-            {
-                key = 'pageup',
-                func = function()
-                    -- 非表示の際は更新しない
-                    if not self:is_active() then
-                        return
-                    end
+            key = 'pageup',
+            func = function()
+                -- 非表示の際は更新しない
+                if not self:is_active() then
+                    return
+                end
 
-                    -- 上方向への移動
-                    cursor_move(self, 'up')
-                end,
-                rep = false,
-                act = 'pressed'
-            },
-            {
-                key = 'pagedown',
-                func = function()
-                    -- 非表示の際は更新しない
-                    if not self:is_active() then
-                        return
-                    end
+                -- 上方向への移動
+                cursor_move(self, 'up')
+            end,
+            rep = false,
+            act = 'pressed'
+        }, {
+            key = 'pagedown',
+            func = function()
+                -- 非表示の際は更新しない
+                if not self:is_active() then
+                    return
+                end
 
-                    -- 下方向への移動
-                    cursor_move(self, 'down')
-                end,
-                rep = false,
-                act = 'pressed'
-            },
-            {
-                key = 'end',
-                func = function()
-                    -- 非表示の際は更新しない
-                    if not self:is_active() then
-                        return
-                    end
+                -- 下方向への移動
+                cursor_move(self, 'down')
+            end,
+            rep = false,
+            act = 'pressed'
+        }, {
+            key = 'end',
+            func = function()
+                -- 非表示の際は更新しない
+                if not self:is_active() then
+                    return
+                end
 
-                    -- returns current dir
-                    local dir = getCurrentDirectory(self)
+                -- returns current dir
+                local dir = getCurrentDirectory(self)
 
-                    -- 決定時の具体的な処理
-                    if dir[self.path[#self.path]].attribute == 'file' then
-                        dir[self.path[#self.path]].contents()
-                    elseif dir[self.path[#self.path]].attribute == 'dir' then
-                        move_path(self, self.path[#self.path])
-                    end
-                end,
-                rep = false,
-                act = 'pressed'
-            },
-            {
-                key = 'home',
-                func = function()
-                    if self:is_active() then
-                        self:deactivate()
-                    else
-                        self:activate()
-                    end
-                end,
-                rep = false,
-                act = 'pressed'
-            }
+                -- 決定時の具体的な処理
+                if dir[self.path[#self.path]].attribute == 'file' then
+                    dir[self.path[#self.path]].contents()
+                elseif dir[self.path[#self.path]].attribute == 'dir' then
+                    move_path(self, self.path[#self.path])
+                end
+            end,
+            rep = false,
+            act = 'pressed'
+        }, {
+            key = 'home',
+            func = function()
+                if self:is_active() then
+                    self:deactivate()
+                else
+                    self:activate()
+                end
+            end,
+            rep = false,
+            act = 'pressed'
         }
-    )
+    })
 end
 
 function Debug:update(dt)
