@@ -18,9 +18,11 @@ function Player:init(x, y)
     Player.super:init(self)
 
     self.physics = world:newRectangleCollider(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
-    self.physics:setType('kinematic')
+    self.physics:setType('dynamic')
+    self.physics:setCollisionClass('Player')
 
     self.moveCount = 0
+    self.isMoving = false
 
     self.keys = KeyManager()
     self.keys:register({
@@ -33,19 +35,25 @@ function Player:init(x, y)
         }, {
             key = 'right',
             func = function()
-                self.moveCount = self.moveCount >= 0 and self.moveCount + 2 or 0
+                self.moveCount = self.moveCount >= 0 and self.moveCount + 3 or 0
+                self.isMoving = true
             end,
             rep = true,
             act = 'pressed'
         }, {
             key = 'left',
             func = function()
-                self.moveCount = self.moveCount <= 0 and self.moveCount - 2 or 0
+                self.moveCount = self.moveCount <= 0 and self.moveCount - 3 or 0
+                self.isMoving = true
             end,
             rep = true,
             act = 'pressed'
         }
     })
+
+    self.keys:setPreProcess(function()
+        self.isMoving = false
+    end)
 end
 
 function Player:update(dt)
@@ -58,13 +66,17 @@ function Player:draw()
 end
 
 function Player:move()
-    self.moveCount = self.moveCount and self.moveCount - signum(self.moveCount) or 0
+    local flag = self.isMoving and 1 or 5
+    self.moveCount = self.moveCount and self.moveCount - flag * signum(self.moveCount) or 0
+    self.moveCount = self.moveCount >= 50 and 50 or self.moveCount
+    self.moveCount = self.moveCount <= -50 and -50 or self.moveCount
 
     local vx, vy = self.physics:getLinearVelocity()
     vx = signum(self.moveCount) * sigmoid(math.abs(self.moveCount), 0.2, 5) * PLAYER_BASE_SPEED
     self.physics:setLinearVelocity(vx, vy)
 
     debug:setDebugInfo('player vx: ' .. vx)
+    debug:setDebugInfo('player isMoving: ' .. tostring(self.isMoving))
 end
 
 function Player:delete()

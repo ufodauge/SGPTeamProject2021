@@ -33,6 +33,7 @@ AnimationManager = require 'class.animationManager'
 
 Player = require 'class.player'
 Ground = require 'class.ground'
+Square = require 'class.square'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと

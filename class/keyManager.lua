@@ -14,6 +14,10 @@ end
 -- 初期化処理
 function KeyManager:init()
     self.key_updator = {}
+    self.post_process = function()
+    end
+    self.pre_process = function()
+    end
 end
 
 -- キー入力の登録をする
@@ -41,6 +45,15 @@ function KeyManager:register(properties)
         print('----------')
     end
 end
+
+function KeyManager:setPreProcess(func)
+    self.pre_process = func
+end
+
+function KeyManager:setPostProcess(func)
+    self.post_process = func
+end
+
 -- function KeyManager:register(key, func, rep, action_type)
 --     -- 引数の確認および修正
 --     action_type = action_type or 'pressed'
@@ -63,6 +76,8 @@ end
 -- end
 
 function KeyManager:update(dt)
+    self.pre_process()
+
     for k, keys in pairs(self.key_updator) do
         -- pressed function
         if love.keyboard.isDown(keys.key) then
@@ -91,6 +106,8 @@ function KeyManager:update(dt)
             keys.func_released_repeat(dt)
         end
     end
+
+    self.post_process()
 end
 
 -- for debugging
