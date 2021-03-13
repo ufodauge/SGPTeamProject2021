@@ -99,6 +99,8 @@ function Debug:init(valid)
     self.valid = valid
     self.active = false
 
+    self.debug_text_list = {}
+
     self.list = {
         {
             attribute = 'dir',
@@ -279,6 +281,7 @@ function Debug:update(dt)
     self.frame_count:update(dt)
 
     self.keys:update(dt)
+
 end
 
 function Debug:draw()
@@ -313,6 +316,8 @@ function Debug:draw()
             end
         end
     end
+
+    self:printDebugInfo()
 end
 
 -- デバッグメニューの有効・無効状態の取得
@@ -333,6 +338,18 @@ end
 -- デバッグメニューの表示状態を取得
 function Debug:is_active()
     return self.active
+end
+
+function Debug:setDebugInfo(text)
+    table.insert(self.debug_text_list, text)
+end
+
+function Debug:printDebugInfo()
+    for index, text in ipairs(self.debug_text_list) do
+        print_with_shadow(index .. ': ' .. text, DEBUG_INFO_X, DEBUG_INFO_Y + Data.Font.size.debug * (index - 1))
+    end
+
+    self.debug_text_list = {}
 end
 
 return Debug

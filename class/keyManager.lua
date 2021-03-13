@@ -28,13 +28,11 @@ function KeyManager:register(properties)
         local repeat_type = property.rep and 'repeat' or 'unrepeat'
         judge_action_type(action_type)
 
-        self.key_updator[property.key] =
-            self.key_updator[property.key] or
-            {
-                key = property.key,
-                -- 押下フレーム（状態遷移図に基づく）
-                frame_count = 0
-            }
+        self.key_updator[property.key] = self.key_updator[property.key] or {
+            key = property.key,
+            -- 押下フレーム（状態遷移図に基づく）
+            frame_count = 0
+        }
 
         self.key_updator[property.key]['func_' .. action_type .. '_' .. repeat_type] = property.func
 
