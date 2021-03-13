@@ -1,0 +1,2 @@
+-- Const.define('BACKGROUND_X', 0)
+-- Const.define('BACKGROUND_Y', 0)
