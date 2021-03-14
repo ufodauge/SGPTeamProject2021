@@ -165,6 +165,10 @@ function Debug:init(valid)
                     attribute = 'file',
                     name = 'quit',
                     contents = function()
+                        -- local currentState = State.current()
+                        -- currentState.leave()
+                        State.current().leave()
+
                         love.event.quit()
                     end
                 }, {

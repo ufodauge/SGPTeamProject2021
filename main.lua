@@ -21,6 +21,8 @@ require 'data.defines'
 States = {}
 States.Dummy = require 'state.dummy'
 States.Sandbox = require 'state.sandbox'
+States.Menu = require 'state.menu'
+States.Levels = require 'state.level'
 
 -- Debug
 Debug = require 'class.debug.debug'
@@ -30,9 +32,11 @@ Instance = require 'class.Instance.instance'
 KeyManager = require 'class.keyManager'
 JoystickManager = require 'class.joystickManager'
 AnimationManager = require 'class.animationManager'
+InfomationManager = require 'class.infomationManager'
 
 Player = require 'class.player'
 Ground = require 'class.ground'
+Goal = require 'class.goal'
 Square = require 'class.square'
 
 function love.load()
@@ -64,6 +68,6 @@ function love.draw()
 
     -- debug
     debug:draw()
-    world:draw()
+    world:draw(128)
     -- debug
 end

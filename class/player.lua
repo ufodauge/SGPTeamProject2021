@@ -20,6 +20,10 @@ function Player:init(x, y)
     self.physics = world:newRectangleCollider(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
     self.physics:setType('dynamic')
     self.physics:setCollisionClass('Player')
+    self.physics:setFixedRotation(true)
+
+    self.additionalPhysics = {}
+    self.additionalJoints = {}
 
     self.moveCount = 0
     self.isMoving = false
@@ -59,6 +63,10 @@ end
 function Player:update(dt)
     self.keys:update(dt)
     self:move()
+
+    if self:isPlayerEnteringGoal() then
+        self:removePlayer()
+    end
 end
 
 function Player:draw()
@@ -77,6 +85,43 @@ function Player:move()
 
     debug:setDebugInfo('player vx: ' .. vx)
     debug:setDebugInfo('player isMoving: ' .. tostring(self.isMoving))
+end
+
+function Player:addNewObject(id, type, x, y)
+    if type == 'square' then
+        self.additionalPhysics[id] = world:newRectangleCollider(x, y, SQUARE_WIDTH, SQUARE_HEIGHT)
+        self.additionalPhysics[id]:setType('dynamic')
+        self.additionalPhysics[id]:setCollisionClass('Player')
+
+        local x0, y0 = self.physics:getPosition()
+        self.additionalJoints[id] = world:addJoint('WeldJoint', self.physics, self.additionalPhysics[id], x, y, false)
+    end
+end
+
+function Player:isPlayerEnteringGoal()
+    if self.physics:enter('Goal') then
+        return true
+    end
+
+    for key, physics in pairs(self.additionalPhysics) do
+        if physics:enter('Goal') then
+            return true
+        end
+    end
+
+    return false
+end
+
+function Player:removePlayer()
+    self.physics:setPosition(1000, 1000)
+    self.physics:setType('static')
+    self.physics:setCollisionClass('Removed')
+
+    for key, physics in pairs(self.additionalPhysics) do
+        physics:setPosition(1000, 1000)
+        physics:setType('static')
+        physics:setCollisionClass('Removed')
+    end
 end
 
 function Player:delete()

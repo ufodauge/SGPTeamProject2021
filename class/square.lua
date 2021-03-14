@@ -10,7 +10,9 @@ end
 
 function Square:update(dt)
     if self.physics:enter('Player') then
-        self:delete()
+        self.physics:setPosition(800, 1000)
+        self.physics:setType('static')
+        self.physics:setCollisionClass('Removed')
     end
 end
 

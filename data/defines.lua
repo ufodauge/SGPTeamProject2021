@@ -21,5 +21,9 @@ Const.define('PLAYER_BASE_SPEED', 100)
 Const.define('SQUARE_WIDTH', 40)
 Const.define('SQUARE_HEIGHT', 40)
 
+-- goal
+Const.define('GOAL_WIDTH', 40)
+Const.define('GOAL_HEIGHT', 40)
+
 -- Const.define('BACKGROUND_X', 0)
 -- Const.define('BACKGROUND_Y', 0)
