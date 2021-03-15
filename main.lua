@@ -1,5 +1,7 @@
 -- debug
 lovebird = require 'lovebird'
+
+-- utility
 lume = require 'lume'
 
 -- data
@@ -22,7 +24,7 @@ States = {}
 States.Dummy = require 'state.dummy'
 States.Sandbox = require 'state.sandbox'
 States.Menu = require 'state.menu'
-States.Levels = require 'state.level'
+States.Levels = require 'state.levels'
 
 -- Debug
 Debug = require 'class.debug.debug'
@@ -33,6 +35,8 @@ KeyManager = require 'class.keyManager'
 JoystickManager = require 'class.joystickManager'
 AnimationManager = require 'class.animationManager'
 InfomationManager = require 'class.infomationManager'
+
+Text = require 'class.text'
 
 Player = require 'class.player'
 Ground = require 'class.ground'

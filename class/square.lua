@@ -22,7 +22,7 @@ end
 
 function Square:delete()
     self.physics:destroy()
-    self.super:delete(self) -- selfを明示的に書いてあげる必要あり
+    self.super.delete(self) -- selfを明示的に書いてあげる必要あり
 end
 
 return Square

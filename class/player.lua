@@ -125,7 +125,11 @@ function Player:removePlayer()
 end
 
 function Player:delete()
-    self.super:delete(self) -- selfを明示的に書いてあげる必要あり
+    self.physics:destroy()
+    for key, physics in pairs(self.additionalPhysics) do
+        physics:destroy()
+    end
+    self.super.delete(self) -- selfを明示的に書いてあげる必要あり
 end
 
 return Player

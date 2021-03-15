@@ -12,7 +12,7 @@ function DummyClass:draw()
 end
 
 function DummyClass:delete()
-    self.super:delete(self) -- selfを明示的に書いてあげる必要あり
+    self.super.delete(self) -- selfを明示的に書いてあげる必要あり
 end
 
 return DummyClass
