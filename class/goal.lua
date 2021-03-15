@@ -17,6 +17,7 @@ function Goal:draw()
 end
 
 function Goal:delete()
+    self.physics:destroy()
     self.super.delete(self) -- selfを明示的に書いてあげる必要あり
 end
 

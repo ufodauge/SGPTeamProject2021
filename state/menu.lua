@@ -12,6 +12,9 @@ function menu:enter()
 end
 
 function menu:update(dt)
+    if love.mouse.isDown(MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_MIDDLE) then
+        State.switch(States.Levels, Data.LevelsMetaData[1])
+    end
 end
 
 function menu:draw()

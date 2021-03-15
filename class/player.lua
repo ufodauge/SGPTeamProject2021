@@ -36,16 +36,18 @@ function Player:init(x, y)
             end,
             rep = false,
             act = 'pressed'
-        }, {
-            key = 'right',
+        },
+        {
+            key = 'd',
             func = function()
                 self.moveCount = self.moveCount >= 0 and self.moveCount + 3 or 0
                 self.isMoving = true
             end,
             rep = true,
             act = 'pressed'
-        }, {
-            key = 'left',
+        },
+        {
+            key = 'a',
             func = function()
                 self.moveCount = self.moveCount <= 0 and self.moveCount - 3 or 0
                 self.isMoving = true
@@ -93,8 +95,23 @@ function Player:addNewObject(id, type, x, y)
         self.additionalPhysics[id]:setType('dynamic')
         self.additionalPhysics[id]:setCollisionClass('Player')
 
+        print('physics added: ' .. tostring(id) .. '(' .. tostring(self.additionalPhysics[id]) .. ')')
+
         local x0, y0 = self.physics:getPosition()
         self.additionalJoints[id] = world:addJoint('WeldJoint', self.physics, self.additionalPhysics[id], x, y, false)
+
+        print('joint added: ' .. tostring(id) .. '(' .. tostring(self.additionalJoints[id]) .. ')')
+    end
+end
+
+function Player:removeArrangedObjectsAll()
+    for key, joint in pairs(self.additionalJoints) do
+        print('joint removed: ' .. tostring(key) .. '(' .. joint .. ')')
+        joint:destroy()
+    end
+    for key, physics in pairs(self.additionalPhysics) do
+        print('physics removed: ' .. tostring(key) .. '(' .. physics .. ')')
+        physics:destroy()
     end
 end
 
@@ -129,6 +146,7 @@ function Player:delete()
     for key, physics in pairs(self.additionalPhysics) do
         physics:destroy()
     end
+
     self.super.delete(self) -- selfを明示的に書いてあげる必要あり
 end
 

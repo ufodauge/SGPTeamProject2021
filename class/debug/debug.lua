@@ -116,14 +116,16 @@ function Debug:init(valid)
                             contents = function()
                                 self.toggle.frame_count = not self.toggle.frame_count
                             end
-                        }, {
+                        },
+                        {
                             attribute = 'file',
                             name = 'free_camera',
                             contents = function()
                                 -- self.toggle.free_camera = not self.toggle.free_camera
                                 self.free_camera:toggle()
                             end
-                        }, {
+                        },
+                        {
                             attribute = 'file',
                             name = 'return',
                             contents = function()
@@ -131,7 +133,8 @@ function Debug:init(valid)
                             end
                         }
                     }
-                }, {
+                },
+                {
                     attribute = 'dir',
                     name = 'framecount',
                     contents = {
@@ -141,19 +144,22 @@ function Debug:init(valid)
                             contents = function()
                                 self.frame_count:reset()
                             end
-                        }, {
+                        },
+                        {
                             attribute = 'file',
                             name = 'stop',
                             contents = function()
                                 self.frame_count:stop()
                             end
-                        }, {
+                        },
+                        {
                             attribute = 'file',
                             name = 'start',
                             contents = function()
                                 self.frame_count:start()
                             end
-                        }, {
+                        },
+                        {
                             attribute = 'file',
                             name = 'return',
                             contents = function()
@@ -161,7 +167,56 @@ function Debug:init(valid)
                             end
                         }
                     }
-                }, {attribute = 'dir', name = 'state', contents = {}}, {
+                },
+                {
+                    attribute = 'dir',
+                    name = 'freecamera',
+                    contents = {
+                        {
+                            attribute = 'dir',
+                            name = 'key config',
+                            contents = {
+                                {
+                                    attribute = 'file',
+                                    name = 'wasd',
+                                    contents = function()
+                                        self.free_camera:changeConfig('wasd')
+                                    end
+                                },
+                                {
+                                    attribute = 'file',
+                                    name = 'direction key',
+                                    contents = function()
+                                        self.free_camera:changeConfig('direction_key')
+                                    end
+                                },
+                                {
+                                    attribute = 'file',
+                                    name = 'numpad',
+                                    contents = function()
+                                        self.free_camera:changeConfig('numpad')
+                                    end
+                                },
+                                {
+                                    attribute = 'file',
+                                    name = 'return',
+                                    contents = function()
+                                        move_path(self, '..')
+                                    end
+                                }
+                            }
+                        },
+                        {
+                            attribute = 'file',
+                            name = 'return',
+                            contents = function()
+                                move_path(self, '..')
+                            end
+                        }
+                    }
+                },
+                {attribute = 'dir', name = 'state', contents = {}},
+                {
                     attribute = 'file',
                     name = 'quit',
                     contents = function()
@@ -171,7 +226,8 @@ function Debug:init(valid)
 
                         love.event.quit()
                     end
-                }, {
+                },
+                {
                     attribute = 'file',
                     name = 'return',
                     contents = function()
@@ -225,7 +281,8 @@ function Debug:init(valid)
             end,
             rep = false,
             act = 'pressed'
-        }, {
+        },
+        {
             key = 'pagedown',
             func = function()
                 -- 非表示の際は更新しない
@@ -238,7 +295,8 @@ function Debug:init(valid)
             end,
             rep = false,
             act = 'pressed'
-        }, {
+        },
+        {
             key = 'end',
             func = function()
                 -- 非表示の際は更新しない
@@ -258,7 +316,8 @@ function Debug:init(valid)
             end,
             rep = false,
             act = 'pressed'
-        }, {
+        },
+        {
             key = 'home',
             func = function()
                 if self:is_active() then
@@ -354,6 +413,10 @@ function Debug:printDebugInfo()
     end
 
     self.debug_text_list = {}
+end
+
+function Debug:changeFreeCameraConfig(type)
+    self.free_camera:changeConfig(type)
 end
 
 return Debug

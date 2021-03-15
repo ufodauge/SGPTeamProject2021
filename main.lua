@@ -8,6 +8,7 @@ lume = require 'lume'
 Data = {}
 Data.Font = require 'data.font'
 Data.Background = require 'data.background'
+Data.LevelsMetaData = require 'data.levelsMetaData'
 
 -- library
 Class = require '30log.30log'
@@ -40,12 +41,15 @@ Text = require 'class.text'
 
 Player = require 'class.player'
 Ground = require 'class.ground'
+ChainGround = require 'class.chainground'
 Goal = require 'class.goal'
 Square = require 'class.square'
+Triangle = require 'class.triangle'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと
     debug = Debug(true)
+    debug:changeFreeCameraConfig('direction_key')
 
     world = Windfield.newWorld(0, 0, true)
     world:setGravity(0, 512)
@@ -68,10 +72,10 @@ function love.draw()
     -- debug
     debug.free_camera:attach()
     Instance:draw()
+    world:draw(128)
     debug.free_camera:detach()
 
     -- debug
     debug:draw()
-    world:draw(128)
     -- debug
 end

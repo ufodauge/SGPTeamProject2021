@@ -28,6 +28,9 @@ Const.define('PLAYER_BASE_SPEED', 100)
 Const.define('SQUARE_WIDTH', 40)
 Const.define('SQUARE_HEIGHT', 40)
 
+-- triangle
+Const.define('TRIANGLE_EDGE_LENGTH', 40)
+
 -- goal
 Const.define('GOAL_WIDTH', 40)
 Const.define('GOAL_HEIGHT', 40)
@@ -38,5 +41,7 @@ Const.define('TEXT_PRINT_TYPE_UPPER_LEFT', 1)
 
 Const.define('TEXT_PRINT_TYPES_LIST', {TEXT_PRINT_TYPE_CENTER, TEXT_PRINT_TYPE_UPPER_LEFT})
 
--- Const.define('BACKGROUND_X', 0)
--- Const.define('BACKGROUND_Y', 0)
+-- mouse
+Const.define('MOUSE_BUTTON_LEFT', 1)
+Const.define('MOUSE_BUTTON_RIGHT', 2)
+Const.define('MOUSE_BUTTON_MIDDLE', 3)
