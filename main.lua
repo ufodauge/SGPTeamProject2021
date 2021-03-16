@@ -29,6 +29,11 @@ Instance = require 'class.Instance.instance'
 KeyManager = require 'class.keyManager'
 JoystickManager = require 'class.joystickManager'
 AnimationManager = require 'class.animationManager'
+SampleTimer= require 'class.sampletimer'
+MouseManager = require 'class.mouseManager'
+PlayerCreationGUI = require 'class.playerCreationGUI'
+GUIBlock = require 'class.GUIBlock'
+BlockBox = require 'class.BlockBox'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと
