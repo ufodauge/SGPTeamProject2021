@@ -22,13 +22,22 @@ function BlockBox:enter()
 end
 
 function BlockBox:update(dt)
-   if self.state == 'clicked' and not love.mouse.isDown(1) and self:isTouched() then
-    self.state = 'neutral'
-    self:getBlock()
-   elseif self.state == 'neutral' and love.mouse.isDown(1) and self:isTouched() then
-    self.state = 'clicked'
-   end
+--    if self.state == 'clicked' and not love.mouse.isDown(1) and self:isTouched() then
+--     self.state = 'neutral'
+--     self:getBlock()
+--    elseif self.state == 'neutral' and love.mouse.isDown(1) and self:isTouched() then
+--     self.state = 'clicked'
+--    end
+    if MouseManager.isReleased then
+        self:ReleaseMouse()
+    end
 
+end
+
+function BlockBox:ReleaseMouse()
+    if self:isTouched() then
+        self:getBlock()
+    end 
 end
 
 function BlockBox:draw()

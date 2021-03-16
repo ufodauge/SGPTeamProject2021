@@ -6,11 +6,13 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.super:init(self)
 
     PlayerCreationGUI.circleBox = BlockBox();
+    PlayerCreationGUI.circleBox.x = 500
+    PlayerCreationGUI.circleBox.y = 300
     print('call')
     
     --プレイヤーを配置できるテーブルのサイズ
-    PlayerCreationGUI.max_tableSize_x = 6
-    PlayerCreationGUI.max_tableSize_y = 5
+    PlayerCreationGUI.max_tableSize_x = 4
+    PlayerCreationGUI.max_tableSize_y = 3
 
     --テーブル原点座標
     PlayerCreationGUI.table_x = 50
@@ -20,7 +22,7 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.tableWidth = 50
     PlayerCreationGUI.tableHeight = 50
 
-    --マウスによるステート
+    --マウスの状態
     PlayerCreationGUI.state = 'neutral'
 
     for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
@@ -45,34 +47,42 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.creationTable[
         PlayerCreationGUI.max_tableSize_x * (PlayerCreationGUI.max_tableSize_y - 1) + math.floor(PlayerCreationGUI.max_tableSize_x/2)
         ].type = 'playerCore'
-
 end
 
 function PlayerCreationGUI:enter()
-    
 end
 
 function PlayerCreationGUI:update(dt)
-    if PlayerCreationGUI.state == 'neutral' and PlayerCreationGUI.catchedItem == 'circle' and love.mouse.isDown(1) then
-        PlayerCreationGUI.state = 'haveABlock'
-    elseif PlayerCreationGUI.state == 'neutral' and PlayerCreationGUI.catchedItem == 'empty' and love.mouse.isDown(1) then
+    if MouseManager.isReleased then
+        PlayerCreationGUI:ReleaseMouse()
+    end
+end
+
+function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
+
+    if PlayerCreationGUI.catchedItem == 'empty' then --自分が何も持っていないとき
         for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
             if PlayerCreationGUI:isTouchedTable(i) and PlayerCreationGUI.creationTable[i].type == 'circle' then
                 PlayerCreationGUI:swapMouseandTable(i)
-                PlayerCreationGUI.state = 'haveABlock'
                 break
             end
         end
-    elseif PlayerCreationGUI.state == 'haveABlock' and PlayerCreationGUI.catchedItem == 'circle' and not love.mouse.isDown(1) then
-        PlayerCreationGUI.state = 'neutral'
+    elseif PlayerCreationGUI.catchedItem == 'circle' then --自分がブロックを持っているとき
+        local deleteBlock = true
         for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
             if PlayerCreationGUI:isTouchedTable(i) and PlayerCreationGUI.creationTable[i].type == 'empty' then
                 PlayerCreationGUI:setItemInTable(i)
+                deleteBlock = false
+                break
+            elseif PlayerCreationGUI:isTouchedTable(i) and (PlayerCreationGUI.creationTable[i].type == 'playerCore' or PlayerCreationGUI.creationTable[i].type == 'circle') then
+                deleteBlock = false
                 break
             end
         end
+        if deleteBlock then
+            PlayerCreationGUI.catchedItem = 'empty'
+        end
     end
-        
 end
 
 function PlayerCreationGUI:draw()
@@ -120,15 +130,14 @@ function PlayerCreationGUI:drawMouseItem()
     love.graphics.setColor(0, 0, 0.5, 1)
     if PlayerCreationGUI.catchedItem == 'circle' then
         love.graphics.circle("fill", MouseManager.x, MouseManager.y, PlayerCreationGUI.tableWidth/3)
-
     end
 end
 
 function PlayerCreationGUI:isTouchedTable(i)
-    return  (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x - PlayerCreationGUI.tableWidth/2) <= MouseManager.x and
-            (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x + PlayerCreationGUI.tableWidth/2) >= MouseManager.x and
-            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y - PlayerCreationGUI.tableHeight/2) <= MouseManager.y and
-            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y + PlayerCreationGUI.tableHeight/2) >= MouseManager.y 
+    return  (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x - PlayerCreationGUI.tableWidth/2) < MouseManager.x and
+            (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x + PlayerCreationGUI.tableWidth/2) > MouseManager.x and
+            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y - PlayerCreationGUI.tableHeight/2) < MouseManager.y and
+            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y + PlayerCreationGUI.tableHeight/2) > MouseManager.y 
 end
 
 function PlayerCreationGUI:setItemInTable(i)

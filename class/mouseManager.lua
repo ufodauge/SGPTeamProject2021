@@ -37,15 +37,15 @@ end
 
 function MouseManager:draw()
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.print('nowX : ' .. MouseManager.x .. ', nowY : ' .. MouseManager.y, 500, 100)
+    --love.graphics.print('nowX : ' .. MouseManager.x .. ', nowY : ' .. MouseManager.y, 500, 100)
     --print(self.clickedTimer)
-    if MouseManager.clickedTimer ~= 0 then
-        love.graphics.print('Mouse is Clicked!', 500, 125)
-        love.graphics.print('clickedX : ' .. MouseManager.clicked_x .. ', clicedY : ' .. MouseManager.clicked_y, 500, 150)
-    end
-    if MouseManager.isReleased then
-        love.graphics.print('Mouse is released!', 500, 175)
-    end
+    -- if MouseManager.clickedTimer ~= 0 then
+    --     love.graphics.print('Mouse is Clicked!', 500, 125)
+    --     love.graphics.print('clickedX : ' .. MouseManager.clicked_x .. ', clicedY : ' .. MouseManager.clicked_y, 500, 150)
+    -- end
+    -- if MouseManager.isReleased then
+    --     love.graphics.print('Mouse is released!', 500, 175)
+    -- end
 end
 
 function MouseManager:delete()
