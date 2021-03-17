@@ -23,18 +23,22 @@ function GUIButton:init()
     self.height = 120 * self.buttonRate.y
 
     self.state = 'neutral'
+
+    self.buttonFunction = nil
+end
+
+function GUIButton:setButtonFunction(func)
+    self.buttonFunction = func
 end
 
 function GUIButton:update(dt)
-    if mouseManager.isReleased then
-        self:ReleaseMouse()
+    if mouseManager.isReleased and self:isTouched() then
+        self:callButtonFunction()
     end
 end
 
-function GUIButton:ReleaseMouse()
-    if self:isTouched() and self.blockNumber >= 1 then
-        clickMotion()
-    end 
+function GUIButton:callButtonFunction()
+    self.buttonFunction()
 end
 
 function GUIButton:draw()

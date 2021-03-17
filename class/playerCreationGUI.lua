@@ -11,11 +11,13 @@ PlayerCreationGUI.image.square = love.graphics.newImage('resource/square.png')
 PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/player.png')
 
 --プレイヤー作成を完了する処理
-function PlayerCreationGUI:completePlayerCreation()
+local function completePlayerCreation()
+    print('complete')
 end
 
 --プレイヤー作成を破棄する処理
-function PlayerCreationGUI:deletePlayerCreation()
+local function deletePlayerCreation()
+    print('delete')
 end
 
 function PlayerCreationGUI:init()
@@ -44,13 +46,13 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.makePlayerButton.x = 600
     PlayerCreationGUI.makePlayerButton.y = 520
     PlayerCreationGUI.makePlayerButton.text = 'MAKE'
-    PlayerCreationGUI.makePlayerButton.clickMotion = PlayerCreationGUI:completePlayerCreation
+    PlayerCreationGUI.makePlayerButton:setButtonFunction(completePlayerCreation)
 
     PlayerCreationGUI.deletePlayerButton = GUIButton()
     PlayerCreationGUI.deletePlayerButton.x = 500
     PlayerCreationGUI.deletePlayerButton.y = 520
     PlayerCreationGUI.deletePlayerButton.text = 'DEL'
-    PlayerCreationGUI.deletePlayerButton.clickMotion = PlayerCreationGUI:deletePlayerCreation
+    PlayerCreationGUI.deletePlayerButton:setButtonFunction(deletePlayerCreation)
     
 
     --テーブルおよびブロックの画像拡大率
@@ -106,6 +108,8 @@ function PlayerCreationGUI:update(dt)
     PlayerCreationGUI.circleBox:update(dt)
     PlayerCreationGUI.triangleBox:update(dt)
     PlayerCreationGUI.squareBox:update(dt)
+    PlayerCreationGUI.makePlayerButton:update(dt)
+    PlayerCreationGUI.deletePlayerButton:update(dt)
 end
 
 function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
