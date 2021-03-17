@@ -5,34 +5,52 @@ PlayerCreationGUI.image = {}
 PlayerCreationGUI.image.background = love.graphics.newImage('resource/GUIBackground.png')
 PlayerCreationGUI.image.table = love.graphics.newImage('resource/flame.png')
 PlayerCreationGUI.image.selectedTable = love.graphics.newImage('resource/selectedTable.png')
-PlayerCreationGUI.image.circle = love.graphics.newImage('resource/circle40.png')
-PlayerCreationGUI.image.triangle = love.graphics.newImage('resource/triangle40.png')
-PlayerCreationGUI.image.square = love.graphics.newImage('resource/square40.png')
-PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/protagonist_take1.png')
+PlayerCreationGUI.image.circle = love.graphics.newImage('resource/circle.png')
+PlayerCreationGUI.image.triangle = love.graphics.newImage('resource/triangle.png')
+PlayerCreationGUI.image.square = love.graphics.newImage('resource/square.png')
+PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/player.png')
+
+--プレイヤー作成を完了する処理
+function PlayerCreationGUI:makePlayerCreation()
+end
+
+--プレイヤー作成を破棄する処理
+function PlayerCreationGUI:deletePlayerCreation()
+end
 
 function PlayerCreationGUI:init()
-    
-
     PlayerCreationGUI.buttonsBoard = ButtonsBoard()
 
-    PlayerCreationGUI.circleBox = BlockBox();
+    PlayerCreationGUI.circleBox = BlockBox()
     PlayerCreationGUI.circleBox.x = 475
     PlayerCreationGUI.circleBox.y = 140
     PlayerCreationGUI.circleBox:setBlockImage('circle')
     PlayerCreationGUI.circleBox:addBlock(3)
     --PlayerCreationGUI.circleBox:setPriority(3)
 
-    PlayerCreationGUI.triangleBox = BlockBox();
+    PlayerCreationGUI.triangleBox = BlockBox()
     PlayerCreationGUI.triangleBox.x = 475
     PlayerCreationGUI.triangleBox.y = 250
     PlayerCreationGUI.triangleBox:setBlockImage('triangle')
     PlayerCreationGUI.triangleBox:addBlock(3)
 
-    PlayerCreationGUI.squareBox = BlockBox();
+    PlayerCreationGUI.squareBox = BlockBox()
     PlayerCreationGUI.squareBox.x = 475
     PlayerCreationGUI.squareBox.y = 360
     PlayerCreationGUI.squareBox:setBlockImage('square')
     PlayerCreationGUI.squareBox:addBlock(3)
+
+    PlayerCreationGUI.makePlayerButton = GUIButton()
+    PlayerCreationGUI.makePlayerButton.x = 600
+    PlayerCreationGUI.makePlayerButton.y = 520
+    PlayerCreationGUI.makePlayerButton.text = 'MAKE'
+    PlayerCreationGUI.makePlayerButton.clickMotion = PlayerCreationGUI:makePlayerCreation
+
+    PlayerCreationGUI.deletePlayerButton = GUIButton()
+    PlayerCreationGUI.deletePlayerButton.x = 500
+    PlayerCreationGUI.deletePlayerButton.y = 520
+    PlayerCreationGUI.deletePlayerButton.text = 'DEL'
+    PlayerCreationGUI.deletePlayerButton.clickMotion = PlayerCreationGUI:deletePlayerCreation
     
 
     --テーブルおよびブロックの画像拡大率
@@ -50,41 +68,47 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.table_x = (400 - PlayerCreationGUI.tableWidth * PlayerCreationGUI.max_tableSize_x) / 2 - PlayerCreationGUI.tableWidth
     PlayerCreationGUI.table_y = (600 - PlayerCreationGUI.tableHeight * PlayerCreationGUI.max_tableSize_y) / 2 - PlayerCreationGUI.tableHeight
 
-    -- テーブル幅
-    self.tableWidth = 50
-    self.tableHeight = 50
+    --マウスの状態
+    PlayerCreationGUI.state = 'neutral'
 
-    
-    -- マウスの状態
-    self.state = 'neutral'
+    -- for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
+    --     print(i..'x: '..PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * math.floor((i-1) % PlayerCreationGUI.max_tableSize_y)
+    -- ..'y: '..PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * math.floor((i-1) / PlayerCreationGUI.max_tableSize_x))
+    -- end
 
-    for i = 1, self.max_tableSize_x * self.max_tableSize_y, 1 do
-        print(i .. 'x: ' .. self.table_x + self.tableWidth * math.floor((i - 1) % self.max_tableSize_y) .. 'y: ' .. self.table_y + self.tableHeight *
-                  math.floor((i - 1) / self.max_tableSize_x))
+    PlayerCreationGUI.creationTable = {
+        {
+            x = 0,
+            y = 0,
+            type = 'empty'
+        }
+    }
+    for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
+        PlayerCreationGUI.creationTable[i] = PlayerCreationGUI.creationTable[i] or {}
+        PlayerCreationGUI.creationTable[i].x = ((i-1) % PlayerCreationGUI.max_tableSize_x) + 1
+        PlayerCreationGUI.creationTable[i].y = (math.floor((i-1) / PlayerCreationGUI.max_tableSize_x)) + 1
+        PlayerCreationGUI.creationTable[i].type = 'empty'
     end
 
-    self.creationTable = {{x = 0, y = 0, type = 'empty'}}
-    for i = 1, self.max_tableSize_x * self.max_tableSize_y, 1 do
-        self.creationTable[i] = self.creationTable[i] or {}
-        self.creationTable[i].x = ((i - 1) % self.max_tableSize_x) + 1
-        self.creationTable[i].y = (math.floor((i - 1) / self.max_tableSize_x)) + 1
-        self.creationTable[i].type = 'empty'
-    end
-
-    self.creationTable[self.max_tableSize_x * (self.max_tableSize_y - 1) + math.floor(self.max_tableSize_x / 2)].type = 'playerCore'
+    PlayerCreationGUI.creationTable[
+        PlayerCreationGUI.max_tableSize_x * (PlayerCreationGUI.max_tableSize_y - 1) + math.floor(PlayerCreationGUI.max_tableSize_x/2)
+        ].type = 'playerCore'
 end
 
-function playerCreationGUI:update(dt)
+function PlayerCreationGUI:enter()
+end
+
+function PlayerCreationGUI:update(dt)
+    
     if mouseManager.isReleased then
-        self:ReleaseMouse()
+        PlayerCreationGUI:ReleaseMouse()
     end
     PlayerCreationGUI.circleBox:update(dt)
-    playerCreationGUI.triangleBox:update(dt)
-    playerCreationGUI.squareBox:update(dt)
+    PlayerCreationGUI.triangleBox:update(dt)
+    PlayerCreationGUI.squareBox:update(dt)
 end
 
-function playerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
-
+function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
 
     if PlayerCreationGUI.catchedItem == 'empty' then --自分が何も持っていないとき
         for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
@@ -120,7 +144,6 @@ function playerCreationGUI:ReleaseMouse() -- マウスを離したときの関�
             elseif blockType == 'square' then
                 PlayerCreationGUI.squareBox:addBlock(1)
             end
-            self.catchedItem = 'empty'
         end
     end
 end
@@ -131,8 +154,10 @@ function PlayerCreationGUI:draw()
 
     PlayerCreationGUI.buttonsBoard:draw()
     PlayerCreationGUI.circleBox:draw()
-    playerCreationGUI.triangleBox:draw()
-    playerCreationGUI.squareBox:draw()
+    PlayerCreationGUI.triangleBox:draw()
+    PlayerCreationGUI.squareBox:draw()
+    PlayerCreationGUI.makePlayerButton:draw()
+    PlayerCreationGUI.deletePlayerButton:draw()
     
     PlayerCreationGUI:drawTable()
     PlayerCreationGUI:drawBlock()
@@ -190,19 +215,21 @@ function PlayerCreationGUI:drawBlock()
             )
         end
     end
+
+    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function PlayerCreationGUI:drawMouseItem()
     if PlayerCreationGUI.catchedItem == 'circle' then
-        love.graphics.draw(PlayerCreationGUI.image.circle, MouseManager.x - 15, MouseManager.y - 15,
+        love.graphics.draw(PlayerCreationGUI.image.circle, mouseManager.x - 15, mouseManager.y - 15,
             0, PlayerCreationGUI.imageRate/2, PlayerCreationGUI.imageRate/2
             )
     elseif PlayerCreationGUI.catchedItem == 'triangle' then
-            love.graphics.draw(PlayerCreationGUI.image.triangle, MouseManager.x - 15, MouseManager.y - 15,
+            love.graphics.draw(PlayerCreationGUI.image.triangle, mouseManager.x - 15, mouseManager.y - 15,
             0, PlayerCreationGUI.imageRate/2, PlayerCreationGUI.imageRate/2
             )
     elseif PlayerCreationGUI.catchedItem == 'square' then
-        love.graphics.draw(PlayerCreationGUI.image.square, MouseManager.x - 15, MouseManager.y - 15,
+        love.graphics.draw(PlayerCreationGUI.image.square, mouseManager.x - 15, mouseManager.y - 15,
         0, PlayerCreationGUI.imageRate/2, PlayerCreationGUI.imageRate/2
         )
     end
@@ -210,34 +237,26 @@ function PlayerCreationGUI:drawMouseItem()
 end
 
 function PlayerCreationGUI:isTouchedTable(i)
-    return  (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x) < MouseManager.x and
-            (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x + PlayerCreationGUI.tableWidth) > MouseManager.x and
-            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y) < MouseManager.y and
-            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y + PlayerCreationGUI.tableHeight) > MouseManager.y 
-
--- function playerCreationGUI:isTouchedTable(i)
---     return (self.table_x + self.tableWidth * self.creationTable[i].x - self.tableWidth / 2) < mouseManager.x and
---                (self.table_x + self.tableWidth * self.creationTable[i].x + self.tableWidth / 2) > mouseManager.x and
---                (self.table_y + self.tableHeight * self.creationTable[i].y - self.tableHeight / 2) < mouseManager.y and
---                (self.table_y + self.tableHeight * self.creationTable[i].y + self.tableHeight / 2) > mouseManager.y
--- >>>>>>> devAgdf
+    return  (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x) < mouseManager.x and
+            (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x + PlayerCreationGUI.tableWidth) > mouseManager.x and
+            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y) < mouseManager.y and
+            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y + PlayerCreationGUI.tableHeight) > mouseManager.y 
 end
 
-function playerCreationGUI:setItemInTable(i)
-    self.creationTable[i].type = self.catchedItem
-    self.catchedItem = 'empty'
+function PlayerCreationGUI:setItemInTable(i)
+    PlayerCreationGUI.creationTable[i].type = PlayerCreationGUI.catchedItem
+    PlayerCreationGUI.catchedItem = 'empty'
 end
 
-function playerCreationGUI:swapMouseandTable(i)
-    local tmp = self.creationTable[i].type
-    self.creationTable[i].type = self.catchedItem
-    self.catchedItem = tmp
+function PlayerCreationGUI:swapMouseandTable(i)
+    local tmp = PlayerCreationGUI.creationTable[i].type
+    PlayerCreationGUI.creationTable[i].type = PlayerCreationGUI.catchedItem
+    PlayerCreationGUI.catchedItem = tmp
 end
 
 function PlayerCreationGUI:delete()
     playerCreationGUI.circleBox:delete()
     self = nil
-
 end
 
-return playerCreationGUI
+return PlayerCreationGUI
