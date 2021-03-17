@@ -22,8 +22,10 @@ function levelState:enter(to, metadata)
     goal = Goal(self.metadata.goal.x, self.metadata.goal.y)
     goal:setImage(GOAL_IMAGE_PATH)
 
-    grounds = {}
+    door = Door(self.metadata.doors[1].x, self.metadata.doors[1].y, self.metadata.doors[1].w, self.metadata.doors[1].h)
+    switch = Switch(self.metadata.switches[1].x, self.metadata.switches[1].y, self.metadata.doors[1].w, self.metadata.doors[1].h)
 
+    grounds = {}
     for index, groundData in ipairs(self.metadata.grounds) do
         grounds[index] = Ground(groundData.x, groundData.y, groundData.w, groundData.h, groundData.rot)
     end
@@ -42,7 +44,7 @@ function levelState:enter(to, metadata)
             squares[#squares]:setImage(SQUARE_IMAGE_PATH)
         elseif collectablesData.type == 'triangle' then
             table.insert(triangles, Triangle(collectablesData.x, collectablesData.y, collectablesData.rot))
-            triangles[#triangles]:setImage(TRIANGLE_IMAGE_PATH)
+            -- triangles[#triangles]:setImage(TRIANGLE_IMAGE_PATH)
         end
     end
 
@@ -71,6 +73,10 @@ function levelState:update(dt)
     for key, respawn in pairs(respawns) do
         respawn:update(dt)
     end
+
+    door:update(dt)
+    switch:update(dt)
+
     for key, square in pairs(squares) do
         square:update(dt)
     end
@@ -91,6 +97,14 @@ function levelState:draw()
     for key, ground in pairs(grounds) do
         ground:draw()
     end
+
+    for key, respawn in pairs(respawns) do
+        respawn:draw()
+    end
+
+    door:draw()
+    switch:draw()
+
     for key, square in pairs(squares) do
         square:draw()
     end
@@ -127,6 +141,10 @@ function levelState:leave()
     for key, respawn in pairs(respawns) do
         respawn:delete()
     end
+
+    door:delete()
+    switch:delete()
+
     for key, square in pairs(squares) do
         square:delete()
     end

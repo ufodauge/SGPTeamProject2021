@@ -19,8 +19,7 @@ function Player:init(x, y)
     self.physics = world:newRectangleCollider(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
     self.physics:setType('dynamic')
     self.physics:setCollisionClass('Player')
-    self.physics:setFixedRotation(false)
-    self.physics:setMass(5)
+    self.physics:setFriction(0)
 
     self.additionalPhysics = {}
     self.additionalJoints = {}
@@ -31,6 +30,7 @@ function Player:init(x, y)
     self.stayOnGround = true
     self.rotatable = true
     self.image = nil
+    self.jump_cooltime = 0
 
     self.keys = KeyManager()
     self.keys:register({
@@ -85,6 +85,8 @@ function Player:update(dt)
         self.physics:setAngle(0)
     end
 
+    self.jump_cooltime = self.jump_cooltime > 0 and self.jump_cooltime - 1 or 0
+
     if self:isPlayerEnteringGoal() then
         self:removePlayer()
         States.Levels:transitionLevel(States.Levels:getCurrentLevelIndex() + 1)
@@ -117,7 +119,8 @@ function Player:setImage(imagePath)
 end
 
 function Player:jump()
-    if self:isStandingOnGround() then
+    if self:isStandingOnGround() and self.jump_cooltime <= 0 then
+        self.jump_cooltime = PLAYER_JUMP_COOLTIME
         self.physics:applyLinearImpulse(0, -1000)
     end
 end
@@ -141,7 +144,7 @@ function Player:move()
 
     local vx, vy = self.physics:getLinearVelocity()
     vx = signum(self.moveCount) * sigmoid(math.abs(self.moveCount), 0.2, 5) * PLAYER_BASE_SPEED
-    self.physics:setLinearVelocity(vx, vy)
+    self.physics:setLinearVelocity(vx * 0.994, vy)
 
 end
 

@@ -17,7 +17,7 @@ function Respawn:update(dt)
 end
 
 function Respawn:draw()
-    love.graphics.setColor(0.4, 0.4, 0.4, 1)
+    love.graphics.setColor(0.4, 0.4, 0.8, 1)
 
     local x, y = self.physics:getPosition()
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)

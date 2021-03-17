@@ -48,6 +48,8 @@ Goal = require 'class.goal'
 Square = require 'class.square'
 Triangle = require 'class.triangle'
 Respawn = require 'class.respawn'
+Door = require 'class.respawn'
+Switch = require 'class.respawn'
 Hud = require 'class.hud'
 HudManager = require 'class.hudManager'
 
@@ -64,7 +66,7 @@ function love.load()
     debug:changeFreeCameraConfig('direction_key')
 
     world = Windfield.newWorld(0, 0, true)
-    world:setGravity(0, 512)
+    world:setGravity(0, 1024)
 
     world:addCollisionClass('Player')
     world:addCollisionClass('Collectable')
@@ -72,6 +74,8 @@ function love.load()
     world:addCollisionClass('Goal')
     world:addCollisionClass('Ground')
     world:addCollisionClass('Respawn')
+    world:addCollisionClass('Switch')
+    world:addCollisionClass('Door_Locked')
 
     State.registerEvents()
     State.switch(States.Menu)

@@ -24,6 +24,7 @@ Const.define('PLAYER_WIDTH', 40)
 Const.define('PLAYER_HEIGHT', 40)
 Const.define('PLAYER_BASE_SPEED', 100)
 Const.define('PLAYER_IMAGE_PATH', 'resource/player.png')
+Const.define('PLAYER_JUMP_COOLTIME', 40)
 
 -- square
 Const.define('SQUARE_WIDTH', 40)

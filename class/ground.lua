@@ -16,7 +16,6 @@ end
 function Ground:draw()
     love.graphics.setColor(0.4, 0.4, 0.4, 1)
 
-    local x, y = self.physics:getPosition()
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
 

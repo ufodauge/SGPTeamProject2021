@@ -8,7 +8,6 @@ function playerCreationGUI:init()
     self.circleBox = BlockBox();
     self.circleBox.x = 500
     self.circleBox.y = 300
-    print('call')
 
     -- プレイヤーを配置できるテーブルのサイズ
     self.max_tableSize_x = 4
