@@ -50,47 +50,41 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.table_x = (400 - PlayerCreationGUI.tableWidth * PlayerCreationGUI.max_tableSize_x) / 2 - PlayerCreationGUI.tableWidth
     PlayerCreationGUI.table_y = (600 - PlayerCreationGUI.tableHeight * PlayerCreationGUI.max_tableSize_y) / 2 - PlayerCreationGUI.tableHeight
 
-    --マウスの状態
-    PlayerCreationGUI.state = 'neutral'
+    -- テーブル幅
+    self.tableWidth = 50
+    self.tableHeight = 50
 
-    -- for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
-    --     print(i..'x: '..PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * math.floor((i-1) % PlayerCreationGUI.max_tableSize_y)
-    -- ..'y: '..PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * math.floor((i-1) / PlayerCreationGUI.max_tableSize_x))
-    -- end
+    
+    -- マウスの状態
+    self.state = 'neutral'
 
-    PlayerCreationGUI.creationTable = {
-        {
-            x = 0,
-            y = 0,
-            type = 'empty'
-        }
-    }
-    for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
-        PlayerCreationGUI.creationTable[i] = PlayerCreationGUI.creationTable[i] or {}
-        PlayerCreationGUI.creationTable[i].x = ((i-1) % PlayerCreationGUI.max_tableSize_x) + 1
-        PlayerCreationGUI.creationTable[i].y = (math.floor((i-1) / PlayerCreationGUI.max_tableSize_x)) + 1
-        PlayerCreationGUI.creationTable[i].type = 'empty'
+    for i = 1, self.max_tableSize_x * self.max_tableSize_y, 1 do
+        print(i .. 'x: ' .. self.table_x + self.tableWidth * math.floor((i - 1) % self.max_tableSize_y) .. 'y: ' .. self.table_y + self.tableHeight *
+                  math.floor((i - 1) / self.max_tableSize_x))
     end
 
-    PlayerCreationGUI.creationTable[
-        PlayerCreationGUI.max_tableSize_x * (PlayerCreationGUI.max_tableSize_y - 1) + math.floor(PlayerCreationGUI.max_tableSize_x/2)
-        ].type = 'playerCore'
+    self.creationTable = {{x = 0, y = 0, type = 'empty'}}
+    for i = 1, self.max_tableSize_x * self.max_tableSize_y, 1 do
+        self.creationTable[i] = self.creationTable[i] or {}
+        self.creationTable[i].x = ((i - 1) % self.max_tableSize_x) + 1
+        self.creationTable[i].y = (math.floor((i - 1) / self.max_tableSize_x)) + 1
+        self.creationTable[i].type = 'empty'
+    end
+
+    self.creationTable[self.max_tableSize_x * (self.max_tableSize_y - 1) + math.floor(self.max_tableSize_x / 2)].type = 'playerCore'
 end
 
-function PlayerCreationGUI:enter()
-end
-
-function PlayerCreationGUI:update(dt)
-    
-    if MouseManager.isReleased then
-        PlayerCreationGUI:ReleaseMouse()
+function playerCreationGUI:update(dt)
+    if mouseManager.isReleased then
+        self:ReleaseMouse()
     end
     PlayerCreationGUI.circleBox:update(dt)
     playerCreationGUI.triangleBox:update(dt)
     playerCreationGUI.squareBox:update(dt)
 end
 
-function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
+function playerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
+
 
     if PlayerCreationGUI.catchedItem == 'empty' then --自分が何も持っていないとき
         for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
@@ -126,6 +120,7 @@ function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関�
             elseif blockType == 'square' then
                 PlayerCreationGUI.squareBox:addBlock(1)
             end
+            self.catchedItem = 'empty'
         end
     end
 end
@@ -195,8 +190,6 @@ function PlayerCreationGUI:drawBlock()
             )
         end
     end
-
-    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function PlayerCreationGUI:drawMouseItem()
@@ -221,22 +214,30 @@ function PlayerCreationGUI:isTouchedTable(i)
             (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x + PlayerCreationGUI.tableWidth) > MouseManager.x and
             (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y) < MouseManager.y and
             (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y + PlayerCreationGUI.tableHeight) > MouseManager.y 
+
+-- function playerCreationGUI:isTouchedTable(i)
+--     return (self.table_x + self.tableWidth * self.creationTable[i].x - self.tableWidth / 2) < mouseManager.x and
+--                (self.table_x + self.tableWidth * self.creationTable[i].x + self.tableWidth / 2) > mouseManager.x and
+--                (self.table_y + self.tableHeight * self.creationTable[i].y - self.tableHeight / 2) < mouseManager.y and
+--                (self.table_y + self.tableHeight * self.creationTable[i].y + self.tableHeight / 2) > mouseManager.y
+-- >>>>>>> devAgdf
 end
 
-function PlayerCreationGUI:setItemInTable(i)
-    PlayerCreationGUI.creationTable[i].type = PlayerCreationGUI.catchedItem
-    PlayerCreationGUI.catchedItem = 'empty'
+function playerCreationGUI:setItemInTable(i)
+    self.creationTable[i].type = self.catchedItem
+    self.catchedItem = 'empty'
 end
 
-function PlayerCreationGUI:swapMouseandTable(i)
-    local tmp = PlayerCreationGUI.creationTable[i].type
-    PlayerCreationGUI.creationTable[i].type = PlayerCreationGUI.catchedItem
-    PlayerCreationGUI.catchedItem = tmp
+function playerCreationGUI:swapMouseandTable(i)
+    local tmp = self.creationTable[i].type
+    self.creationTable[i].type = self.catchedItem
+    self.catchedItem = tmp
 end
 
 function PlayerCreationGUI:delete()
     playerCreationGUI.circleBox:delete()
     self = nil
+
 end
 
-return PlayerCreationGUI
+return playerCreationGUI

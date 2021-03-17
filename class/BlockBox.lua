@@ -60,13 +60,13 @@ function BlockBox:enter()
 end
 
 function BlockBox:update(dt)
---    if self.state == 'clicked' and not love.mouse.isDown(1) and self:isTouched() then
---     self.state = 'neutral'
---     self:getBlock()
---    elseif self.state == 'neutral' and love.mouse.isDown(1) and self:isTouched() then
---     self.state = 'clicked'
---    end
-    if MouseManager.isReleased then
+    --    if self.state == 'clicked' and not love.mouse.isDown(1) and self:isTouched() then
+    --     self.state = 'neutral'
+    --     self:getBlock()
+    --    elseif self.state == 'neutral' and love.mouse.isDown(1) and self:isTouched() then
+    --     self.state = 'clicked'
+    --    end
+    if mouseManager.isReleased then
         self:ReleaseMouse()
     end
 
@@ -75,7 +75,7 @@ end
 function BlockBox:ReleaseMouse()
     if self:isTouched() and self.blockNumber >= 1 then
         self:getBlock()
-    end 
+    end
 end
 
 function BlockBox:draw()
@@ -103,6 +103,7 @@ function BlockBox:drawBox()
         love.graphics.print(self.blockNumber, BlockBox.font.pixel12B, self.x + self.width/1.4, self.y + self.height/4 - 3,
         0, 2, 2)
     end
+<<<<<<< HEAD
     love.graphics.setColor(1,1,1,1)
 end
 
@@ -111,13 +112,25 @@ function BlockBox:isTouched()
             (self.x + self.width) >= MouseManager.x and
             (self.y) <= MouseManager.y and
             (self.y + self.height) >= MouseManager.y 
+=======
+
+    love.graphics.line(self.x - self.width, self.y - self.height, self.x + self.width, self.y - self.height, self.x + self.width, self.y + self.height,
+                       self.x - self.width, self.y + self.height, self.x - self.width, self.y - self.height)
+    love.graphics.circle('line', self.x, self.y, self.width)
+end
+
+function BlockBox:isTouched()
+    return (self.x - self.width) <= mouseManager.x and (self.x + self.width) >= mouseManager.x and (self.y - self.height) <= mouseManager.y and
+               (self.y + self.height) >= mouseManager.y
+>>>>>>> devAgdf
 end
 
 function BlockBox:isClicked()
-    return self:isTouched() and MouseManager.clickedTimer == 1
+    return self:isTouched() and mouseManager.clickedTimer == 1
 end
 
 function BlockBox:getBlock()
+<<<<<<< HEAD
     if PlayerCreationGUI.catchedItem == 'empty' then
         PlayerCreationGUI.catchedItem = self.blocktype
         self:subBlock(1)
@@ -126,6 +139,13 @@ end
 
 function BlockBox:delete()
     self = nil
+=======
+    playerCreationGUI.catchedItem = self.blocktype
+end
+
+function BlockBox:delete()
+    self.super.delete(self)
+>>>>>>> devAgdf
 end
 
 return BlockBox

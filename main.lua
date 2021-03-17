@@ -8,6 +8,7 @@ lume = require 'lume'
 Data = {}
 Data.Font = require 'data.font'
 Data.Background = require 'data.background'
+-- Data.Image = require 'data.image'
 Data.LevelsMetaData = require 'data.levelsMetaData'
 
 -- library
@@ -46,6 +47,11 @@ ChainGround = require 'class.chainground'
 Goal = require 'class.goal'
 Square = require 'class.square'
 Triangle = require 'class.triangle'
+Respawn = require 'class.respawn'
+Door = require 'class.respawn'
+Switch = require 'class.respawn'
+Hud = require 'class.hud'
+HudManager = require 'class.hudManager'
 
 -- SampleTimer = require 'class.sampletimer'
 MouseManager = require 'class.mouseManager'
@@ -53,6 +59,7 @@ PlayerCreationGUI = require 'class.playerCreationGUI'
 GUIBlock = require 'class.GUIBlock'
 BlockBox = require 'class.BlockBox'
 ButtonsBoard = require 'class.buttonsBoard'
+BackGround = require 'class.BackGround'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと
@@ -60,13 +67,16 @@ function love.load()
     debug:changeFreeCameraConfig('direction_key')
 
     world = Windfield.newWorld(0, 0, true)
-    world:setGravity(0, 512)
+    world:setGravity(0, 1024)
 
     world:addCollisionClass('Player')
     world:addCollisionClass('Collectable')
     world:addCollisionClass('Removed', {ignores = {'Removed'}})
     world:addCollisionClass('Goal')
     world:addCollisionClass('Ground')
+    world:addCollisionClass('Respawn')
+    world:addCollisionClass('Switch')
+    world:addCollisionClass('Door_Locked')
 
     State.registerEvents()
     State.switch(States.Menu)
@@ -86,7 +96,7 @@ function love.draw()
     -- debug
     debug.free_camera:attach()
     Instance:draw()
-    world:draw(128)
+    -- world:draw(128)
     debug.free_camera:detach()
 
     -- debug

@@ -6,7 +6,6 @@ function sandbox:init()
 end
 
 function sandbox:enter()
-
     -- sampleTimer = SampleTimer()
     -- sampleTimer:toggle()
     playerCreationGUI = PlayerCreationGUI()

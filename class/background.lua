@@ -1,18 +1,26 @@
-local BackGround = Instance:extend('BackGround')
+local BackGround = Class('BackGround')
 
 function BackGround:init()
-    BackGround.super:init(self)
+    self.image = nil
 end
 
 function BackGround:update(dt)
 end
 
+function BackGround:setImage(imagePath)
+    self.image = love.graphics.newImage(imagePath)
+    self.image:setFilter('nearest', 'nearest')
+end
+
 function BackGround:draw()
-    love.graphics.setColor(1, 1, 1, 1)
+    if self.image then
+        love.graphics.setColor(1, 1, 1, 0.8)
+        love.graphics.draw(self.image, 0, 0)
+    end
 end
 
 function BackGround:delete()
-    self.super:delete(self) -- selfを明示的に書いてあげる必要あり
+
 end
 
 return BackGround
