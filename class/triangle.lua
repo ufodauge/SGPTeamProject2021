@@ -21,6 +21,7 @@ function Trianlge:update(dt)
         self.physics:setPosition(800, 1000)
         self.physics:setType('static')
         self.physics:setCollisionClass('Removed')
+        infomationManager:addCollectable('square')
     end
 end
 

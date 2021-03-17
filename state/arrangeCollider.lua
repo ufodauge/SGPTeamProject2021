@@ -5,15 +5,13 @@ arrangeCollider.name = 'arrangeCollider'
 function arrangeCollider:init()
 end
 
-function arrangeCollider:enter()
+function arrangeCollider:enter(from, infoTable)
+    self.from = from
 
-    -- sampleTimer = SampleTimer()
-    -- sampleTimer:toggle()
+    blackbox = BlackBox()
+
     mouseManager = MouseManager()
     playerCreationGUI = PlayerCreationGUI()
-    -- mGGUIBlock =  GUIBlock()
-    -- blockBox = BlockBox()
-
 end
 
 function arrangeCollider:update(dt)
@@ -23,12 +21,9 @@ function arrangeCollider:draw()
 end
 
 function arrangeCollider:leave()
-
-    -- sampleTimer:delete()
+    blackbox:delete()
     playerCreationGUI:delete()
     mouseManager:delete()
-    -- mGUIBlock:delete()
-    -- blockBox:delete()
 end
 
 return arrangeCollider

@@ -47,12 +47,15 @@ ChainGround = require 'class.chainground'
 Goal = require 'class.goal'
 Square = require 'class.square'
 Triangle = require 'class.triangle'
+Hud = require 'class.hud'
+HudManager = require 'class.hudManager'
 
 -- SampleTimer = require 'class.sampletimer'
 MouseManager = require 'class.mouseManager'
 PlayerCreationGUI = require 'class.playerCreationGUI'
 GUIBlock = require 'class.GUIBlock'
 BlockBox = require 'class.BlockBox'
+BlackBox = require 'class.BlackBox'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと
@@ -69,7 +72,7 @@ function love.load()
     world:addCollisionClass('Ground')
 
     State.registerEvents()
-    State.switch(States.ArrangeCollider)
+    State.switch(States.Menu)
 end
 
 function love.update(dt)

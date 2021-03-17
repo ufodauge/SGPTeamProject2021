@@ -1,12 +1,15 @@
 local InfomationManager = Instance:extend('InfomationManager')
 
-InfomationManager.super:init(InfomationManager)
+function InfomationManager:init()
+    self.super:init(self)
 
-InfomationManager.collectablesName = {'square', 'circle'}
+    self.collectablesName = {'square', 'circle'}
 
-InfomationManager.countCollectables = {square = 0, circle = 0}
-InfomationManager.groundsNearbyPlayer = {}
-InfomationManager.arrangedObjectsInfo = {{id = 0, x = 0, y = 0, type = ''}}
+    self.countCollectables = {square = 0, circle = 0}
+    self.groundsNearbyPlayer = {}
+    self.arrangedObjectsInfo = {{id = 0, x = 0, y = 0, type = ''}}
+end
+
 --[[
     InfomationManager.arrangedObjectsInfo = {
         [1] = {x = 0, y = 0, type = ''}
@@ -18,13 +21,17 @@ InfomationManager.arrangedObjectsInfo = {{id = 0, x = 0, y = 0, type = ''}}
 -- end
 
 function InfomationManager:addCollectable(type)
-    for index, value in ipairs(InfomationManager.collectablesName) do
+    for index, value in ipairs(self.collectablesName) do
         if type == value then
-            InfomationManager.countCollectables[type] = InfomationManager.countCollectables[type] + 1
+            self.countCollectables[type] = self.countCollectables[type] + 1
             return
         end
     end
     error('incorrect type is called in InfomationManager:addCollectable')
+end
+
+function InfomationManager:getCollectablesInfo()
+    return self.countCollectables
 end
 
 function InfomationManager:getGroundsNearbyPlayer()

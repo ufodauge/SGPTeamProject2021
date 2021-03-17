@@ -20,7 +20,8 @@ function Player:init(x, y)
     self.physics = world:newRectangleCollider(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
     self.physics:setType('dynamic')
     self.physics:setCollisionClass('Player')
-    self.physics:setFixedRotation(true)
+    self.physics:setFixedRotation(false)
+    self.physics:setMass(5)
 
     self.additionalPhysics = {}
     self.additionalJoints = {}
@@ -72,7 +73,7 @@ function Player:update(dt)
 
     if self:isPlayerEnteringGoal() then
         self:removePlayer()
-        State.switch(States.Levels, Data.LevelsMetaData[States.Levels:getCurrentLevelIndex() + 1])
+        States.Levels:transitionLevel(States.Levels:getCurrentLevelIndex() + 1)
     end
 end
 
