@@ -16,9 +16,11 @@ function sandbox:enter()
 end
 
 function sandbox:update(dt)
+    playerCreationGUI:update(dt)
 end
 
 function sandbox:draw()
+    playerCreationGUI:draw()
 end
 
 function sandbox:leave()

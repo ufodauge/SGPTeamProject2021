@@ -59,6 +59,7 @@ PlayerCreationGUI = require 'class.playerCreationGUI'
 GUIBlock = require 'class.GUIBlock'
 BlockBox = require 'class.BlockBox'
 BackGround = require 'class.BackGround'
+ButtonsBoard = require 'class.buttonsBoard'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと

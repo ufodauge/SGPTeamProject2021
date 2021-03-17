@@ -14,9 +14,11 @@ function arrangeCollider:enter(from, infoTable)
 end
 
 function arrangeCollider:update(dt)
+    playerCreationGUI:update(dt)
 end
 
 function arrangeCollider:draw()
+    playerCreationGUI:draw()
     -- self.from:draw()
 end
 
