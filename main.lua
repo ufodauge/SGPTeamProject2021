@@ -26,6 +26,7 @@ States.Dummy = require 'state.dummy'
 States.Sandbox = require 'state.sandbox'
 States.Menu = require 'state.menu'
 States.Levels = require 'state.levels'
+States.ArrangeCollider = require 'state.arrangeCollider'
 
 -- Debug
 Debug = require 'class.debug.debug'
@@ -45,6 +46,12 @@ ChainGround = require 'class.chainground'
 Goal = require 'class.goal'
 Square = require 'class.square'
 Triangle = require 'class.triangle'
+
+-- SampleTimer = require 'class.sampletimer'
+MouseManager = require 'class.mouseManager'
+PlayerCreationGUI = require 'class.playerCreationGUI'
+GUIBlock = require 'class.GUIBlock'
+BlockBox = require 'class.BlockBox'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと

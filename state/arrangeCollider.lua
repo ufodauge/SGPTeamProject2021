@@ -1,11 +1,11 @@
-local sandbox = {}
+local arrangeCollider = {}
 
-sandbox.name = 'sandbox'
+arrangeCollider.name = 'arrangeCollider'
 
-function sandbox:init()
+function arrangeCollider:init()
 end
 
-function sandbox:enter()
+function arrangeCollider:enter()
 
     -- sampleTimer = SampleTimer()
     -- sampleTimer:toggle()
@@ -16,13 +16,13 @@ function sandbox:enter()
 
 end
 
-function sandbox:update(dt)
+function arrangeCollider:update(dt)
 end
 
-function sandbox:draw()
+function arrangeCollider:draw()
 end
 
-function sandbox:leave()
+function arrangeCollider:leave()
 
     -- sampleTimer:delete()
     playerCreationGUI:delete()
@@ -31,4 +31,4 @@ function sandbox:leave()
     -- blockBox:delete()
 end
 
-return sandbox
+return arrangeCollider
