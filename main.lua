@@ -8,6 +8,7 @@ lume = require 'lume'
 Data = {}
 Data.Font = require 'data.font'
 Data.Background = require 'data.background'
+-- Data.Image = require 'data.image'
 Data.LevelsMetaData = require 'data.levelsMetaData'
 
 -- library
@@ -68,7 +69,7 @@ function love.load()
     world:addCollisionClass('Ground')
 
     State.registerEvents()
-    State.switch(States.Menu)
+    State.switch(States.ArrangeCollider)
 end
 
 function love.update(dt)

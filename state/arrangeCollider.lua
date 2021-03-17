@@ -9,8 +9,8 @@ function arrangeCollider:enter()
 
     -- sampleTimer = SampleTimer()
     -- sampleTimer:toggle()
-    playerCreationGUI = PlayerCreationGUI()
     mouseManager = MouseManager()
+    playerCreationGUI = PlayerCreationGUI()
     -- mGGUIBlock =  GUIBlock()
     -- blockBox = BlockBox()
 

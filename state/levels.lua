@@ -45,6 +45,9 @@ function levelState:leave()
     player:delete()
     goal:delete()
 
+    for key, ground in pairs(grounds) do
+        ground:delete()
+    end
     for key, square in pairs(squares) do
         square:delete()
     end
