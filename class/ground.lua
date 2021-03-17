@@ -5,6 +5,7 @@ function Ground:init(x, y, w, h)
 
     self.physics = world:newRectangleCollider(x, y, w, h)
     self.physics:setType('static')
+    self.physics:setCollisionClass('Ground')
 end
 
 function Ground:update(dt)

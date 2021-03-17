@@ -360,12 +360,9 @@ function World:generateCategoriesMasks()
     end
     local edge_groups = {}
     for k, v in pairs(incoming) do
-        table.sort(
-            v,
-            function(a, b)
-                return string.lower(a) < string.lower(b)
-            end
-        )
+        table.sort(v, function(a, b)
+            return string.lower(a) < string.lower(b)
+        end)
     end
     local i = 0
     for k, v in pairs(incoming) do
@@ -427,7 +424,8 @@ local function collEnsure(collision_class_name1, a, collision_class_name2, b)
 end
 
 local function collIf(collision_class_name1, collision_class_name2, a, b)
-    if (a.collision_class == collision_class_name1 and b.collision_class == collision_class_name2) or (a.collision_class == collision_class_name2 and b.collision_class == collision_class_name1) then
+    if (a.collision_class == collision_class_name1 and b.collision_class == collision_class_name2) or
+        (a.collision_class == collision_class_name2 and b.collision_class == collision_class_name1) then
         return true
     else
         return false
@@ -657,7 +655,8 @@ function World:queryRectangleArea(x, y, w, h, collision_class_names)
     for _, collider in ipairs(colliders) do
         if self:collisionClassInCollisionClassesList(collider.collision_class, collision_class_names) then
             for _, fixture in ipairs(collider.body:getFixtures()) do
-                if self.wf.Math.polygon.isPolygonInside({x, y, x + w, y, x + w, y + h, x, y + h}, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
+                if self.wf.Math.polygon
+                    .isPolygonInside({x, y, x + w, y, x + w, y + h, x, y + h}, {collider.body:getWorldPoints(fixture:getShape():getPoints())}) then
                     table.insert(outs, collider)
                     break
                 end
@@ -798,27 +797,24 @@ function Collider.new(world, collider_type, ...)
         self.collision_class = (args[6] and args[6].collision_class) or 'Default'
         self.body = love.physics.newBody(self.world.box2d_world, args[1] + args[3] / 2, args[2] + args[4] / 2, (args[6] and args[6].body_type) or 'dynamic')
         local w, h, s = args[3], args[4], args[5]
-        shape =
-            love.physics.newPolygonShape(
-            {
-                -w / 2,
-                -h / 2 + s,
-                -w / 2 + s,
-                -h / 2,
-                w / 2 - s,
-                -h / 2,
-                w / 2,
-                -h / 2 + s,
-                w / 2,
-                h / 2 - s,
-                w / 2 - s,
-                h / 2,
-                -w / 2 + s,
-                h / 2,
-                -w / 2,
-                h / 2 - s
-            }
-        )
+        shape = love.physics.newPolygonShape({
+            -w / 2,
+            -h / 2 + s,
+            -w / 2 + s,
+            -h / 2,
+            w / 2 - s,
+            -h / 2,
+            w / 2,
+            -h / 2 + s,
+            w / 2,
+            h / 2 - s,
+            w / 2 - s,
+            h / 2,
+            -w / 2 + s,
+            h / 2,
+            -w / 2,
+            h / 2 - s
+        })
     elseif self.type == 'Polygon' then
         self.collision_class = (args[2] and args[2].collision_class) or 'Default'
         self.body = love.physics.newBody(self.world.box2d_world, 0, 0, (args[2] and args[2].body_type) or 'dynamic')
@@ -891,7 +887,7 @@ end
 
 function Collider:setCollisionClass(collision_class_name)
     if not self.world.collision_classes[collision_class_name] then
-        error('Collision class ' .. collision_class_name .. " doesn't exist.")
+        error('Collision class ' .. collision_class_name .. ' doesn\'t exist.')
     end
     self.collision_class = collision_class_name
     for _, fixture in pairs(self.fixtures) do
@@ -916,6 +912,7 @@ function Collider:enter(other_collision_class_name)
             end
         end
     end
+    return false
 end
 
 function Collider:getEnterCollisionData(other_collision_class_name)
@@ -949,9 +946,13 @@ end
 function Collider:stay(other_collision_class_name)
     if self.collision_stay[other_collision_class_name] then
         if #self.collision_stay[other_collision_class_name] >= 1 then
+            for index, value in pairs(self.collision_stay[other_collision_class_name]) do
+                -- debug:setDebugInfo('self.collision_stay[' .. other_collision_class_name .. '][' .. tostring(index) .. ']: ' .. tostring(value))
+            end
             return true
         end
     end
+    return false
 end
 
 function Collider:getStayCollisionData(other_collision_class_name)

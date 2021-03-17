@@ -5,6 +5,7 @@ function ChainGround:init(verticies, loop)
 
     self.physics = world:newChainCollider(verticies, loop)
     self.physics:setType('static')
+    self.physics:setCollisionClass('Ground')
 end
 
 function ChainGround:update(dt)

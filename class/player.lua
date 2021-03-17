@@ -27,12 +27,14 @@ function Player:init(x, y)
 
     self.moveCount = 0
     self.isMoving = false
+    self.stayOnGround = true
 
     self.keys = KeyManager()
     self.keys:register({
         {
-            key = 'z',
+            key = 'w',
             func = function()
+                self:jump()
             end,
             rep = false,
             act = 'pressed'
@@ -66,13 +68,33 @@ function Player:update(dt)
     self.keys:update(dt)
     self:move()
 
+    self:manageEnteringCollidersInfo()
+
     if self:isPlayerEnteringGoal() then
         self:removePlayer()
+        State.switch(States.Levels, Data.LevelsMetaData[States.Levels:getCurrentLevelIndex() + 1])
     end
 end
 
 function Player:draw()
     love.graphics.setColor(1, 1, 1, 1)
+end
+
+function Player:jump()
+    if self:isStandingOnGround() then
+        self.physics:applyLinearImpulse(0, -1000)
+    end
+end
+
+function Player:isStandingOnGround()
+    return self.stayOnGround
+end
+
+function Player:manageEnteringCollidersInfo()
+    self.physics:enter('Ground')
+    self.stayOnGround = self.physics:stay('Ground')
+    self.physics:exit('Ground')
+    -- debug:setDebugInfo('self.stayOnGround' .. tostring(self.stayOnGround))
 end
 
 function Player:move()

@@ -3,10 +3,6 @@ local sandbox = {}
 sandbox.name = 'sandbox'
 
 function sandbox:init()
-    world:addCollisionClass('Player')
-    world:addCollisionClass('Collectable')
-    world:addCollisionClass('Removed', {ignores = {'Removed'}})
-    world:addCollisionClass('Goal')
 end
 
 function sandbox:enter()

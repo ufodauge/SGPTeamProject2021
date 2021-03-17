@@ -31,6 +31,14 @@ Const.define('SQUARE_HEIGHT', 40)
 -- triangle
 Const.define('TRIANGLE_EDGE_LENGTH', 40)
 
+-- switch
+Const.define('SWITCH_WIDTH', 40)
+Const.define('SWITCH_HEIGHT', 40)
+
+-- door
+Const.define('DOOR_WIDTH', 40)
+Const.define('DOOR_HEIGHT', 40)
+
 -- goal
 Const.define('GOAL_WIDTH', 40)
 Const.define('GOAL_HEIGHT', 40)

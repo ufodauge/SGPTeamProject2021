@@ -54,8 +54,14 @@ function love.load()
     world = Windfield.newWorld(0, 0, true)
     world:setGravity(0, 512)
 
+    world:addCollisionClass('Player')
+    world:addCollisionClass('Collectable')
+    world:addCollisionClass('Removed', {ignores = {'Removed'}})
+    world:addCollisionClass('Goal')
+    world:addCollisionClass('Ground')
+
     State.registerEvents()
-    State.switch(States.Sandbox)
+    State.switch(States.Menu)
 end
 
 function love.update(dt)
