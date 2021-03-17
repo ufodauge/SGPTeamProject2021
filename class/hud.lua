@@ -1,7 +1,6 @@
-local Hud = Instance:extend('Hud')
+local Hud = Class('Hud')
 
 function Hud:init(x, y, width, height)
-    Hud.super:init(self)
 
     self.x, self.y = x, y
     self.width, self.height = width, height
@@ -58,7 +57,7 @@ function Hud:setImage(image)
 end
 
 function Hud:delete()
-    self.super.delete(self) -- selfを明示的に書いてあげる必要あり
+    self = nil
 end
 
 return Hud

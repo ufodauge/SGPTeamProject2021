@@ -1,7 +1,6 @@
-local HudManager = Instance:extend('HudManager')
+local HudManager = Class('HudManager')
 
 function HudManager:init()
-    HudManager.super:init(self)
 
     self.huds = {}
     self.isDebugDrawEnabled = false
@@ -9,13 +8,18 @@ end
 
 function HudManager:update(dt)
     self:manageMouseInfo()
+
+    for name, hud in pairs(self.huds) do
+        hud:update(dt)
+    end
 end
 
 function HudManager:draw()
     love.graphics.setColor(1, 1, 1, 1)
 
-    if self.isDebugDrawEnabled then
-        for name, hud in pairs(self.huds) do
+    for name, hud in pairs(self.huds) do
+        hud:draw()
+        if self.isDebugDrawEnabled then
             hud:debugDraw()
         end
     end
@@ -58,7 +62,7 @@ function HudManager:delete()
     for name, hud in pairs(self.huds) do
         hud:delete()
     end
-    self.super.delete(self) -- selfを明示的に書いてあげる必要あり
+    self = nil
 end
 
 return HudManager

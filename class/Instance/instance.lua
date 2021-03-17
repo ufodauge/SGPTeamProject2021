@@ -65,12 +65,12 @@ function Instance:setPriority(priority)
 
     table.sort(Instance._list, sort)
 
-    -- print('------------------------------')
-    -- print('priorities:')
-    -- for i, v in pairs(Instance._list) do
-    --     print(i, v.priority, v)
-    -- end
-    -- print('------------------------------')
+    print('------------------------------')
+    print('priorities:')
+    for i, v in pairs(Instance._list) do
+        print(i, v.priority, v)
+    end
+    print('------------------------------')
 end
 
 function Instance:setPosition(x, y)

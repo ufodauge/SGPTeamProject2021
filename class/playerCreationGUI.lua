@@ -41,9 +41,6 @@ function playerCreationGUI:init()
     self.creationTable[self.max_tableSize_x * (self.max_tableSize_y - 1) + math.floor(self.max_tableSize_x / 2)].type = 'playerCore'
 end
 
-function playerCreationGUI:enter()
-end
-
 function playerCreationGUI:update(dt)
     if mouseManager.isReleased then
         self:ReleaseMouse()

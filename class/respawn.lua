@@ -1,28 +1,31 @@
-local Ground = Class('Ground')
+local Respawn = Class('Respawn')
 
-function Ground:init(x, y, w, h)
+function Respawn:init(x, y, w, h)
 
     self.x, self.y = x, y
     self.width, self.height = w, h
 
     self.physics = world:newRectangleCollider(x, y, w, h)
     self.physics:setType('static')
-    self.physics:setCollisionClass('Ground')
+    self.physics:setCollisionClass('Respawn')
 end
 
-function Ground:update(dt)
+function Respawn:update(dt)
+    if self.physics:enter('Player') then
+        States.Levels:transitionLevel(States.Levels:getCurrentLevelIndex())
+    end
 end
 
-function Ground:draw()
+function Respawn:draw()
     love.graphics.setColor(0.4, 0.4, 0.4, 1)
 
     local x, y = self.physics:getPosition()
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
 
-function Ground:delete()
+function Respawn:delete()
     self.physics:destroy()
     self = nil
 end
 
-return Ground
+return Respawn

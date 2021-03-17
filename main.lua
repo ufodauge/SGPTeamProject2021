@@ -47,6 +47,7 @@ ChainGround = require 'class.chainground'
 Goal = require 'class.goal'
 Square = require 'class.square'
 Triangle = require 'class.triangle'
+Respawn = require 'class.respawn'
 Hud = require 'class.hud'
 HudManager = require 'class.hudManager'
 
@@ -55,7 +56,7 @@ MouseManager = require 'class.mouseManager'
 PlayerCreationGUI = require 'class.playerCreationGUI'
 GUIBlock = require 'class.GUIBlock'
 BlockBox = require 'class.BlockBox'
-BlackBox = require 'class.BlackBox'
+BackGround = require 'class.BackGround'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと
@@ -70,6 +71,7 @@ function love.load()
     world:addCollisionClass('Removed', {ignores = {'Removed'}})
     world:addCollisionClass('Goal')
     world:addCollisionClass('Ground')
+    world:addCollisionClass('Respawn')
 
     State.registerEvents()
     State.switch(States.Menu)
@@ -89,7 +91,7 @@ function love.draw()
     -- debug
     debug.free_camera:attach()
     Instance:draw()
-    world:draw(128)
+    -- world:draw(128)
     debug.free_camera:detach()
 
     -- debug

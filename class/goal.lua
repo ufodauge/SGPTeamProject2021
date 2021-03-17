@@ -1,7 +1,6 @@
-local Goal = Instance:extend('Goal')
+local Goal = Class('Goal')
 
 function Goal:init(x, y)
-    Goal.super:init(self)
 
     self.physics = world:newRectangleCollider(x, y, GOAL_WIDTH, GOAL_HEIGHT)
     self.physics:setType('static')
@@ -14,11 +13,21 @@ end
 
 function Goal:draw()
     love.graphics.setColor(1, 1, 1, 1)
+
+    if self.image then
+        local x, y = self.physics:getPosition()
+        love.graphics.draw(self.image, x - GOAL_WIDTH / 2, y - GOAL_HEIGHT / 2)
+    end
+end
+
+function Goal:setImage(imagePath)
+    self.image = love.graphics.newImage(imagePath)
+    self.image:setFilter('nearest', 'nearest')
 end
 
 function Goal:delete()
     self.physics:destroy()
-    self.super.delete(self) -- selfを明示的に書いてあげる必要あり
+    self = nil
 end
 
 return Goal

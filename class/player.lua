@@ -1,4 +1,4 @@
-local Player = Instance:extend('Player')
+local Player = Class('Player')
 
 local sigmoid = function(x, a, b)
     return 1 / (1 + math.exp(a * (-x) + b))
@@ -15,7 +15,6 @@ local signum = function(x)
 end
 
 function Player:init(x, y)
-    Player.super:init(self)
 
     self.physics = world:newRectangleCollider(x, y, PLAYER_WIDTH, PLAYER_HEIGHT)
     self.physics:setType('dynamic')
@@ -25,10 +24,13 @@ function Player:init(x, y)
 
     self.additionalPhysics = {}
     self.additionalJoints = {}
+    self.additionalObjectInfo = {}
 
     self.moveCount = 0
     self.isMoving = false
     self.stayOnGround = true
+    self.rotatable = true
+    self.image = nil
 
     self.keys = KeyManager()
     self.keys:register({
@@ -47,6 +49,14 @@ function Player:init(x, y)
                 self.isMoving = true
             end,
             rep = true,
+            act = 'pressed'
+        },
+        {
+            key = 's',
+            func = function()
+                self.rotatable = not self.rotatable
+            end,
+            rep = false,
             act = 'pressed'
         },
         {
@@ -71,6 +81,10 @@ function Player:update(dt)
 
     self:manageEnteringCollidersInfo()
 
+    if self.rotatable then
+        self.physics:setAngle(0)
+    end
+
     if self:isPlayerEnteringGoal() then
         self:removePlayer()
         States.Levels:transitionLevel(States.Levels:getCurrentLevelIndex() + 1)
@@ -78,7 +92,28 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setColor(0.1, 0.1, 0.1, 1)
+
+    if self.image then
+        local x, y = self.physics:getPosition()
+        local r = self.physics:getAngle()
+
+        love.graphics.draw(self.image, x, y, r, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
+    end
+
+    for key, physics in pairs(self.additionalPhysics) do
+        if self.imageSquare then
+            local x, y = physics:getPosition()
+            local r = physics:getAngle()
+
+            love.graphics.draw(self.imageSquare, x, y, r, 1, 1, SQUARE_WIDTH / 2, SQUARE_HEIGHT / 2)
+        end
+    end
+end
+
+function Player:setImage(imagePath)
+    self.image = love.graphics.newImage(imagePath)
+    self.image:setFilter('nearest', 'nearest')
 end
 
 function Player:jump()
@@ -108,12 +143,12 @@ function Player:move()
     vx = signum(self.moveCount) * sigmoid(math.abs(self.moveCount), 0.2, 5) * PLAYER_BASE_SPEED
     self.physics:setLinearVelocity(vx, vy)
 
-    debug:setDebugInfo('player vx: ' .. vx)
-    debug:setDebugInfo('player isMoving: ' .. tostring(self.isMoving))
 end
 
 function Player:addNewObject(id, type, x, y)
     if type == 'square' then
+        self.additionalObjectInfo[id] = {type = type}
+
         self.additionalPhysics[id] = world:newRectangleCollider(x, y, SQUARE_WIDTH, SQUARE_HEIGHT)
         self.additionalPhysics[id]:setType('dynamic')
         self.additionalPhysics[id]:setCollisionClass('Player')
@@ -169,8 +204,7 @@ function Player:delete()
     for key, physics in pairs(self.additionalPhysics) do
         physics:destroy()
     end
-
-    self.super.delete(self) -- selfを明示的に書いてあげる必要あり
+    self = nil
 end
 
 return Player

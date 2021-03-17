@@ -1,7 +1,6 @@
-local InfomationManager = Instance:extend('InfomationManager')
+local InfomationManager = Class('InfomationManager')
 
 function InfomationManager:init()
-    self.super:init(self)
 
     self.collectablesName = {'square', 'circle'}
 
@@ -52,7 +51,7 @@ function InfomationManager:draw()
 end
 
 function InfomationManager:delete()
-    self.super.delete(self) -- selfを明示的に書いてあげる必要あり
+    self = nil
 end
 
 return InfomationManager
