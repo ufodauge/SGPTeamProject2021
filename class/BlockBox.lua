@@ -1,21 +1,59 @@
-local BlockBox = Instance:extend('BlockBox')
+local BlockBox = Class('BlockBox')
 
 blockTypeList = {}
 blockTypeList['empty'] = 'empty'
 blockTypeList['circle'] = 'circle'
+blockTypeList['triangle'] = 'triangle'
+blockTypeList['square'] = 'square'
+
+BlockBox.font = {}
+BlockBox.font.pixel10R = love.graphics.newFont('resource/PixelMplus10-Regular.ttf')
+BlockBox.font.pixel12B = love.graphics.newFont('resource/PixelMplus12-Bold.ttf')
+
+
+BlockBox.image = {}
+BlockBox.image.neutralButton = love.graphics.newImage('resource/GUIButton.png')
+BlockBox.image.pushButton = love.graphics.newImage('resource/GUIButton_push.png')
 
 function BlockBox:init()
-    self.super:init(self)
+    --ボタンの画像拡大率
+    self.buttonRate = {}
+    self.buttonRate.x = 2
+    self.buttonRate.y = 0.7
 
     self.x = 400
     self.y = 300
 
-    self.width = 30
-    self.height = 30
+    self.width = 120 * self.buttonRate.x
+    self.height = 120 * self.buttonRate.y
 
     self.state = 'neutral'
 
     self.blocktype = blockTypeList['circle']
+    self.image.shape = PlayerCreationGUI.image.circle
+
+    self.blockNumber = 0
+end
+
+function BlockBox:addBlock(num) --ブロックを増やす
+    self.blockNumber = self.blockNumber + num
+end
+
+function BlockBox:subBlock(num) --ブロックを減らす
+    self.blockNumber = self.blockNumber - num
+end
+
+function BlockBox:setBlockImage(blockType)
+
+    self.blocktype = blockTypeList[blockType]
+
+    if blockType == 'circle' then
+        self.image.shape = PlayerCreationGUI.image.circle
+    elseif blockType == 'triangle' then
+        self.image.shape = PlayerCreationGUI.image.triangle
+    elseif blockType == 'square' then
+        self.image.shape = PlayerCreationGUI.image.square
+    end
 end
 
 function BlockBox:enter()
@@ -35,7 +73,7 @@ function BlockBox:update(dt)
 end
 
 function BlockBox:ReleaseMouse()
-    if self:isTouched() then
+    if self:isTouched() and self.blockNumber >= 1 then
         self:getBlock()
     end 
 end
@@ -45,27 +83,33 @@ function BlockBox:draw()
 end
 
 function BlockBox:drawBox()
-    
+
     if self:isTouched() then
-        love.graphics.setColor(0, 0.7, 0, 0.5)
+        love.graphics.draw(BlockBox.image.pushButton,
+        self.x, self.y,0,self.buttonRate.x,self.buttonRate.y)
+        love.graphics.draw(self.image.shape, self.x + self.width/5, self.y + self.height/4 - 5)
+        love.graphics.setColor(0,0,0,1)
+        love.graphics.print('x', BlockBox.font.pixel12B, self.x + self.width/2, self.y + self.height/4 - 3,
+        0, 2, 2)
+        love.graphics.print(self.blockNumber, BlockBox.font.pixel12B, self.x + self.width/1.4, self.y + self.height/4 - 1,
+        0, 2, 2)
     else
-        love.graphics.setColor(1, 0.7, 0, 1)
+        love.graphics.draw(BlockBox.image.neutralButton,
+        self.x, self.y,0,self.buttonRate.x,self.buttonRate.y)
+        love.graphics.draw(self.image.shape, self.x + self.width/5, self.y + self.height/4 - 7)
+        love.graphics.setColor(0,0,0,1)
+        love.graphics.print('x', BlockBox.font.pixel12B, self.x + self.width/2, self.y + self.height/4 - 5,
+        0, 2, 2)
+        love.graphics.print(self.blockNumber, BlockBox.font.pixel12B, self.x + self.width/1.4, self.y + self.height/4 - 3,
+        0, 2, 2)
     end
-    
-    love.graphics.line(
-        self.x - self.width, self.y - self.height,
-        self.x + self.width, self.y - self.height,
-        self.x + self.width, self.y + self.height,
-        self.x - self.width, self.y + self.height,
-        self.x - self.width, self.y - self.height
-    )
-    love.graphics.circle("line", self.x, self.y, self.width)
+    love.graphics.setColor(1,1,1,1)
 end
 
 function BlockBox:isTouched()
-    return  (self.x - self.width) <= MouseManager.x and
+    return  (self.x) <= MouseManager.x and
             (self.x + self.width) >= MouseManager.x and
-            (self.y - self.height) <= MouseManager.y and
+            (self.y) <= MouseManager.y and
             (self.y + self.height) >= MouseManager.y 
 end
 
@@ -74,11 +118,14 @@ function BlockBox:isClicked()
 end
 
 function BlockBox:getBlock()
-    PlayerCreationGUI.catchedItem = self.blocktype
+    if PlayerCreationGUI.catchedItem == 'empty' then
+        PlayerCreationGUI.catchedItem = self.blocktype
+        self:subBlock(1)
+    end
 end
 
 function BlockBox:delete()
-    self.super:delete(self)
+    self = nil
 end
 
 return BlockBox
