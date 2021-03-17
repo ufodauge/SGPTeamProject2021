@@ -11,7 +11,7 @@ PlayerCreationGUI.image.square = love.graphics.newImage('resource/square.png')
 PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/player.png')
 
 --プレイヤー作成を完了する処理
-function PlayerCreationGUI:makePlayerCreation()
+function PlayerCreationGUI:completePlayerCreation()
 end
 
 --プレイヤー作成を破棄する処理
@@ -44,7 +44,7 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.makePlayerButton.x = 600
     PlayerCreationGUI.makePlayerButton.y = 520
     PlayerCreationGUI.makePlayerButton.text = 'MAKE'
-    PlayerCreationGUI.makePlayerButton.clickMotion = PlayerCreationGUI:makePlayerCreation
+    PlayerCreationGUI.makePlayerButton.clickMotion = PlayerCreationGUI:completePlayerCreation
 
     PlayerCreationGUI.deletePlayerButton = GUIButton()
     PlayerCreationGUI.deletePlayerButton.x = 500
