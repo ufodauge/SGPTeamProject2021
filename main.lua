@@ -96,7 +96,7 @@ function love.draw()
     -- debug
     debug.free_camera:attach()
     Instance:draw()
-    -- world:draw(128)
+    world:draw(128)
     debug.free_camera:detach()
 
     -- debug

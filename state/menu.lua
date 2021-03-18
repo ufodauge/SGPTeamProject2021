@@ -13,7 +13,7 @@ end
 
 function menu:update(dt)
     if love.mouse.isDown(MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT, MOUSE_BUTTON_MIDDLE) then
-        States.Levels:transitionLevel(4)
+        States.Levels:transitionLevel(1)
     end
 end
 

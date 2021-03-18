@@ -28,8 +28,10 @@ function Player:init(x, y)
     self.moveCount = 0
     self.isMoving = false
     self.stayOnGround = true
-    self.rotatable = true
     self.image = nil
+    self.imageInteriorSquare = nil
+    self.imageInteriorTriangle = nil
+    self.imageInteriorCircle = nil
     self.jump_cooltime = 0
 
     self.keys = KeyManager()
@@ -54,7 +56,8 @@ function Player:init(x, y)
         {
             key = 's',
             func = function()
-                self.rotatable = not self.rotatable
+                -- self.rotatable = not self.rotatable
+                self.physics:setFixedRotation(not self.physics:isFixedRotation())
             end,
             rep = false,
             act = 'pressed'
@@ -79,11 +82,10 @@ function Player:update(dt)
     self.keys:update(dt)
     self:move()
 
-    self:manageEnteringCollidersInfo()
+    -- self:setInteriorsTarget(self.physics:getPosition())
+    self:correctInteriorsAngle()
 
-    if self.rotatable then
-        self.physics:setAngle(0)
-    end
+    self:manageEnteringCollidersInfo()
 
     self.jump_cooltime = self.jump_cooltime > 0 and self.jump_cooltime - 1 or 0
 
@@ -103,25 +105,50 @@ function Player:draw()
         love.graphics.draw(self.image, x, y, r, 1, 1, PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2)
     end
 
-    for key, physics in pairs(self.additionalPhysics) do
-        if self.imageSquare then
+    for index, physics in ipairs(self.additionalPhysics) do
+        if self.imageInteriorSquare and self.additionalObjectInfo[index].type == 'square' then
             local x, y = physics:getPosition()
             local r = physics:getAngle()
 
-            love.graphics.draw(self.imageSquare, x, y, r, 1, 1, SQUARE_WIDTH / 2, SQUARE_HEIGHT / 2)
+            love.graphics.draw(self.imageInteriorSquare, x, y, r, 1, 1, SQUARE_WIDTH / 2, SQUARE_HEIGHT / 2)
+        elseif self.imageInteriorTriangle and self.additionalObjectInfo[index].type == 'triangle' then
+            local x, y = physics:getPosition()
+            local r = physics:getAngle()
+
+            love.graphics.draw(self.imageInteriorTriangle, x, y, r, 1, 1, SQUARE_WIDTH / 2, SQUARE_HEIGHT / 2)
+
+        elseif self.imageInteriorCircle and self.additionalObjectInfo[index].type == 'circle' then
+            local x, y = physics:getPosition()
+            local r = physics:getAngle()
+
+            love.graphics.draw(self.imageInteriorCircle, x, y, r, 1, 1, SQUARE_WIDTH / 2, SQUARE_HEIGHT / 2)
         end
     end
 end
 
-function Player:setImage(imagePath)
-    self.image = love.graphics.newImage(imagePath)
-    self.image:setFilter('nearest', 'nearest')
+function Player:setImage(imagePath, type)
+    if type == 'square' then
+        self.imageInteriorSquare = love.graphics.newImage(imagePath)
+        self.imageInteriorSquare:setFilter('nearest', 'nearest')
+    elseif type == 'triangle' then
+        self.imageInteriorTriangle = love.graphics.newImage(imagePath)
+        self.imageInteriorTriangle:setFilter('nearest', 'nearest')
+    elseif type == 'circle' then
+        self.imageInteriorCircle = love.graphics.newImage(imagePath)
+        self.imageInteriorCircle:setFilter('nearest', 'nearest')
+    else
+        self.image = love.graphics.newImage(imagePath)
+        self.image:setFilter('nearest', 'nearest')
+    end
 end
 
 function Player:jump()
     if self:isStandingOnGround() and self.jump_cooltime <= 0 then
         self.jump_cooltime = PLAYER_JUMP_COOLTIME
-        self.physics:applyLinearImpulse(0, -1000)
+        self.physics:setLinearVelocity(0, -300)
+        for id, physics in pairs(self.additionalPhysics) do
+            self.additionalPhysics[id]:setLinearVelocity(0, -300)
+        end
     end
 end
 
@@ -150,30 +177,53 @@ end
 
 function Player:addNewObject(id, type, x, y)
     if type == 'square' then
-        self.additionalObjectInfo[id] = {type = type}
+        self.additionalObjectInfo[id] = {type = type, relativeX = x, relativeY = y}
 
         self.additionalPhysics[id] = world:newRectangleCollider(x, y, SQUARE_WIDTH, SQUARE_HEIGHT)
         self.additionalPhysics[id]:setType('dynamic')
         self.additionalPhysics[id]:setCollisionClass('Player')
+        self.additionalPhysics[id]:setFriction(0)
 
-        print('physics added: ' .. tostring(id) .. '(' .. tostring(self.additionalPhysics[id]) .. ')')
+        print('physics added: ' .. tostring(id) .. '(' .. tostring(self.additionalPhysics[id]:getX()) .. ', ' .. tostring(self.additionalPhysics[id]:getY()) ..
+                  ')')
 
-        local x0, y0 = self.physics:getPosition()
-        self.additionalJoints[id] = world:addJoint('WeldJoint', self.physics, self.additionalPhysics[id], x, y, false)
+        self.additionalJoints[id] = world:addJoint('WeldJoint', self.physics, self.additionalPhysics[id], x + SQUARE_WIDTH / 2, y + SQUARE_HEIGHT / 2, true)
 
         print('joint added: ' .. tostring(id) .. '(' .. tostring(self.additionalJoints[id]) .. ')')
     end
 end
 
+function Player:setRelativePositions(id, x, y)
+    self.additionalObjectInfo[id].relativeX = x
+    self.additionalObjectInfo[id].relativeY = y
+end
+
+function Player:setInteriorsTarget(playerX, playerY)
+    for id, joint in pairs(self.additionalJoints) do
+        self.additionalJoints[id]:setTarget(playerX + PLAYER_WIDTH / 2 + self.additionalObjectInfo[id].relativeX,
+                                            playerY + PLAYER_HEIGHT / 2 + self.additionalObjectInfo[id].relativeY)
+    end
+end
+
+function Player:correctInteriorsAngle()
+    for id, physics in pairs(self.additionalPhysics) do
+        self.additionalPhysics[id]:setAngle(self.physics:getAngle())
+    end
+end
+
 function Player:removeArrangedObjectsAll()
-    for key, joint in pairs(self.additionalJoints) do
-        print('joint removed: ' .. tostring(key) .. '(' .. joint .. ')')
+    for index, joint in ipairs(self.additionalJoints) do
+        print('joint removed: ' .. tostring(index) .. '(' .. tostring(joint) .. ')')
         joint:destroy()
     end
-    for key, physics in pairs(self.additionalPhysics) do
-        print('physics removed: ' .. tostring(key) .. '(' .. physics .. ')')
+    for index, physics in ipairs(self.additionalPhysics) do
+        print('physics removed: ' .. tostring(index) .. '(' .. tostring(physics) .. ')')
         physics:destroy()
     end
+
+    self.additionalJoints = {}
+    self.additionalPhysics = {}
+    self.additionalObjectInfo = {}
 end
 
 function Player:isPlayerEnteringGoal()

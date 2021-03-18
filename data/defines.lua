@@ -35,6 +35,10 @@ Const.define('SQUARE_IMAGE_PATH', 'resource/square.png')
 Const.define('TRIANGLE_EDGE_LENGTH', 40)
 Const.define('TRIANGLE_IMAGE_PATH', 'resource/triangle.png')
 
+-- circle
+Const.define('CIRCLE_RADIUS', 20)
+Const.define('CIRCLE_IMAGE_PATH', 'resource/circle.png')
+
 -- switch
 Const.define('SWITCH_WIDTH', 40)
 Const.define('SWITCH_HEIGHT', 40)

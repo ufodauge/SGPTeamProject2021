@@ -12,13 +12,13 @@ PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/player.png
 
 -- プレイヤー作成を完了する処理
 local function completePlayerCreation()
-    State.pop()
+    State.pop(PlayerCreationGUI:getArrangedTable())
     print('complete')
 end
 
 -- プレイヤー作成を破棄する処理
 local function deletePlayerCreation()
-    State.pop()
+    State.pop({})
     print('delete')
 end
 
@@ -211,6 +211,7 @@ function PlayerCreationGUI:drawBlock()
 end
 
 function PlayerCreationGUI:drawMouseItem()
+    love.graphics.setColor(1, 1, 1, 1)
     if PlayerCreationGUI.catchedItem == 'circle' then
         love.graphics.draw(PlayerCreationGUI.image.circle, mouseManager.x - 15, mouseManager.y - 15, 0, PlayerCreationGUI.imageRate / 2,
                            PlayerCreationGUI.imageRate / 2)
@@ -221,7 +222,6 @@ function PlayerCreationGUI:drawMouseItem()
         love.graphics.draw(PlayerCreationGUI.image.square, mouseManager.x - 15, mouseManager.y - 15, 0, PlayerCreationGUI.imageRate / 2,
                            PlayerCreationGUI.imageRate / 2)
     end
-    love.graphics.setColor(1, 1, 1, 1)
 end
 
 function PlayerCreationGUI:isTouchedTable(i)
@@ -241,6 +241,18 @@ function PlayerCreationGUI:swapMouseandTable(i)
     local tmp = PlayerCreationGUI.creationTable[i].type
     PlayerCreationGUI.creationTable[i].type = PlayerCreationGUI.catchedItem
     PlayerCreationGUI.catchedItem = tmp
+end
+
+function PlayerCreationGUI:getArrangedTable()
+    local arrangedTable = {}
+
+    for index, tbl in ipairs(PlayerCreationGUI.creationTable) do
+        if tbl.type ~= 'empty' and tbl.type ~= 'playerCore' then
+            table.insert(arrangedTable, {type = tbl.type, x = tbl.x, y = tbl.y})
+        end
+    end
+
+    return arrangedTable
 end
 
 function PlayerCreationGUI:delete()

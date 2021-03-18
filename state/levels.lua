@@ -11,6 +11,8 @@ function levelState:enter(to, metadata)
         self.metadata[key] = value
     end
 
+    self.arrangedTable = {}
+
     infomationManager = InfomationManager()
 
     background = BackGround()
@@ -18,6 +20,9 @@ function levelState:enter(to, metadata)
 
     player = Player(self.metadata.player.x, self.metadata.player.y)
     player:setImage(PLAYER_IMAGE_PATH)
+    player:setImage(SQUARE_IMAGE_PATH, 'square')
+    player:setImage(TRIANGLE_IMAGE_PATH, 'triangle')
+    player:setImage(CIRCLE_IMAGE_PATH, 'circle')
 
     goal = Goal(self.metadata.goal.x, self.metadata.goal.y)
     goal:setImage(GOAL_IMAGE_PATH)
@@ -64,6 +69,7 @@ function levelState:update(dt)
     background:update(dt)
 
     player:update(dt)
+
     goal:update(dt)
 
     for key, ground in pairs(grounds) do
@@ -114,6 +120,8 @@ function levelState:draw()
 
     hudManager:draw()
     debug.free_camera:detach()
+
+    debug:draw()
 end
 
 function levelState:getCurrentLevelIndex()
@@ -153,6 +161,24 @@ function levelState:leave()
     end
 
     hudManager:delete()
+end
+
+function levelState:resume(from, arrangedTable)
+    player:removeArrangedObjectsAll()
+
+    self.arrangedTable = arrangedTable
+
+    for index, tbl in ipairs(arrangedTable) do
+        local x, y = 0, 0
+
+        print(tbl.x, SQUARE_WIDTH, player.physics:getX())
+
+        x = (tbl.x - 2) * SQUARE_WIDTH - SQUARE_WIDTH / 2
+        y = (tbl.y - 3) * SQUARE_HEIGHT - SQUARE_HEIGHT / 2
+
+        player:addNewObject(index, tbl.type, x + player.physics:getX(), y + player.physics:getY())
+        player:setRelativePositions(index, x, y)
+    end
 end
 
 return levelState
