@@ -2,13 +2,13 @@ PlayerCreationGUI = Class('PlayerCreationGUI')
 
 PlayerCreationGUI.catchedItem = 'empty'
 PlayerCreationGUI.image = {}
-PlayerCreationGUI.image.background = love.graphics.newImage('resource/GUIBackground.png')
-PlayerCreationGUI.image.table = love.graphics.newImage('resource/flame.png')
-PlayerCreationGUI.image.selectedTable = love.graphics.newImage('resource/selectedTable.png')
-PlayerCreationGUI.image.circle = love.graphics.newImage('resource/circle.png')
-PlayerCreationGUI.image.triangle = love.graphics.newImage('resource/triangle.png')
-PlayerCreationGUI.image.square = love.graphics.newImage('resource/square.png')
-PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/player.png')
+PlayerCreationGUI.image.background = love.graphics.newImage('resource//GUIBackground.png')
+PlayerCreationGUI.image.table = love.graphics.newImage('resource//flame.png')
+PlayerCreationGUI.image.selectedTable = love.graphics.newImage('resource//selectedTable.png')
+PlayerCreationGUI.image.circle = love.graphics.newImage('resource//circle.png')
+PlayerCreationGUI.image.triangle = love.graphics.newImage('resource//triangle.png')
+PlayerCreationGUI.image.square = love.graphics.newImage('resource//square.png')
+PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource//player.png')
 
 -- プレイヤー作成を完了する処理
 local function completePlayerCreation()

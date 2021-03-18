@@ -7,12 +7,12 @@ BlockTypeList['triangle'] = 'triangle'
 BlockTypeList['square'] = 'square'
 
 BlockBox.font = {}
-BlockBox.font.pixel10R = love.graphics.newFont('resource/PixelMplus10-Regular.ttf')
-BlockBox.font.pixel12B = love.graphics.newFont('resource/PixelMplus12-Bold.ttf')
+BlockBox.font.pixel10R = love.graphics.newFont('resource//PixelMplus10-Regular.ttf')
+BlockBox.font.pixel12B = love.graphics.newFont('resource//PixelMplus12-Bold.ttf')
 
 BlockBox.image = {}
-BlockBox.image.neutralButton = love.graphics.newImage('resource/GUIButton.png')
-BlockBox.image.pushButton = love.graphics.newImage('resource/GUIButton_push.png')
+BlockBox.image.neutralButton = love.graphics.newImage('resource//GUIbutton.png')
+BlockBox.image.pushButton = love.graphics.newImage('resource//GUIbutton_push.png')
 
 function BlockBox:init()
     -- ボタンの画像拡大率

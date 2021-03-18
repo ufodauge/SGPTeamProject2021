@@ -1,7 +1,7 @@
 local ButtonsBoard = Instance:extend('ButtonsBoard')
 
 ButtonsBoard.image = {}
-ButtonsBoard.image.buttonsBoard = love.graphics.newImage('resource/ButtonsFlame.png')
+ButtonsBoard.image.buttonsBoard = love.graphics.newImage('resource//ButtonsFlame.png')
 
 function ButtonsBoard:init()
     self.super:init(self)

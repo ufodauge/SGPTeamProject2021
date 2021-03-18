@@ -23,21 +23,21 @@ Const.define('DEBUG_FREECAMERA_Y', 25)
 Const.define('PLAYER_WIDTH', 40)
 Const.define('PLAYER_HEIGHT', 40)
 Const.define('PLAYER_BASE_SPEED', 100)
-Const.define('PLAYER_IMAGE_PATH', 'resource/player.png')
+Const.define('PLAYER_IMAGE_PATH', 'resource//player.png')
 Const.define('PLAYER_JUMP_COOLTIME', 40)
 
 -- square
 Const.define('SQUARE_WIDTH', 40)
 Const.define('SQUARE_HEIGHT', 40)
-Const.define('SQUARE_IMAGE_PATH', 'resource/square.png')
+Const.define('SQUARE_IMAGE_PATH', 'resource//square.png')
 
 -- triangle
 Const.define('TRIANGLE_EDGE_LENGTH', 40)
-Const.define('TRIANGLE_IMAGE_PATH', 'resource/triangle.png')
+Const.define('TRIANGLE_IMAGE_PATH', 'resource//triangle.png')
 
 -- circle
 Const.define('CIRCLE_RADIUS', 20)
-Const.define('CIRCLE_IMAGE_PATH', 'resource/circle.png')
+Const.define('CIRCLE_IMAGE_PATH', 'resource//circle.png')
 
 -- switch
 Const.define('SWITCH_WIDTH', 40)
@@ -50,7 +50,7 @@ Const.define('DOOR_HEIGHT', 40)
 -- goal
 Const.define('GOAL_WIDTH', 40)
 Const.define('GOAL_HEIGHT', 40)
-Const.define('GOAL_IMAGE_PATH', 'resource/black_hole.png')
+Const.define('GOAL_IMAGE_PATH', 'resource//black_hole.png')
 
 -- text
 Const.define('TEXT_PRINT_TYPE_CENTER', 0)
@@ -70,8 +70,8 @@ Const.define('HUD_ACTIVATE_ARRANGE_OBJECTS_BUTTON_Y', 10)
 Const.define('HUD_ACTIVATE_ARRANGE_OBJECTS_BUTTON_WIDTH', 40)
 Const.define('HUD_ACTIVATE_ARRANGE_OBJECTS_BUTTON_HEIGHT', 40)
 Const.define('HUD_ACTIVATE_ARRANGE_OBJECTS_BUTTON_TAG', 'activateArrangeObjectsButton')
-Const.define('HUD_ACTIVATE_ARRANGE_OBJECTS_BUTTON_IMAGE_PATH', 'resource/spanner.png')
+Const.define('HUD_ACTIVATE_ARRANGE_OBJECTS_BUTTON_IMAGE_PATH', 'resource//spanner.png')
 
 -- background
-Const.define('BACKGROUND_IN_GAME', 'resource/background.png')
+Const.define('BACKGROUND_IN_GAME', 'resource//background.png')
 

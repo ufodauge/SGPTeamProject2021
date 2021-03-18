@@ -58,7 +58,7 @@ MouseManager = require 'class.mouseManager'
 PlayerCreationGUI = require 'class.playerCreationGUI'
 GUIButton = require 'class.GUIButton'
 BlockBox = require 'class.BlockBox'
-BackGround = require 'class.BackGround'
+BackGround = require 'class.background'
 ButtonsBoard = require 'class.buttonsBoard'
 
 function love.load()
