@@ -20,6 +20,22 @@ local function deletePlayerCreation()
     print('delete')
 end
 
+--プレイヤー作成をリセットする処理
+local function resetPlayerCreation()
+    for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
+        if PlayerCreationGUI.creationTable[i].type == 'circle' then
+            PlayerCreationGUI.creationTable[i].type = 'empty'
+            PlayerCreationGUI.circleBox:addBlock(1)
+        elseif PlayerCreationGUI.creationTable[i].type == 'triangle' then
+            PlayerCreationGUI.creationTable[i].type = 'empty'
+            PlayerCreationGUI.triangleBox:addBlock(1)
+        elseif PlayerCreationGUI.creationTable[i].type == 'square' then
+            PlayerCreationGUI.creationTable[i].type = 'empty'
+            PlayerCreationGUI.squareBox:addBlock(1)
+        end
+    end
+end
+
 function PlayerCreationGUI:init()
     PlayerCreationGUI.buttonsBoard = ButtonsBoard()
 
@@ -28,7 +44,6 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.circleBox.y = 140
     PlayerCreationGUI.circleBox:setBlockImage('circle')
     PlayerCreationGUI.circleBox:addBlock(3)
-    --PlayerCreationGUI.circleBox:setPriority(3)
 
     PlayerCreationGUI.triangleBox = BlockBox()
     PlayerCreationGUI.triangleBox.x = 475
@@ -43,16 +58,24 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.squareBox:addBlock(3)
 
     PlayerCreationGUI.makePlayerButton = GUIButton()
-    PlayerCreationGUI.makePlayerButton.x = 600
+    PlayerCreationGUI.makePlayerButton.x = 675
     PlayerCreationGUI.makePlayerButton.y = 520
     PlayerCreationGUI.makePlayerButton.text = 'MAKE'
     PlayerCreationGUI.makePlayerButton:setButtonFunction(completePlayerCreation)
 
     PlayerCreationGUI.deletePlayerButton = GUIButton()
-    PlayerCreationGUI.deletePlayerButton.x = 500
+    PlayerCreationGUI.deletePlayerButton.x = 565
     PlayerCreationGUI.deletePlayerButton.y = 520
     PlayerCreationGUI.deletePlayerButton.text = 'DEL'
+    PlayerCreationGUI.deletePlayerButton.textOffset.x = 4
     PlayerCreationGUI.deletePlayerButton:setButtonFunction(deletePlayerCreation)
+
+    PlayerCreationGUI.resetPlayerButton = GUIButton()
+    PlayerCreationGUI.resetPlayerButton.x = 455
+    PlayerCreationGUI.resetPlayerButton.y = 520
+    PlayerCreationGUI.resetPlayerButton.text = 'RESET'
+    PlayerCreationGUI.resetPlayerButton.textOffset.x = -3
+    PlayerCreationGUI.resetPlayerButton:setButtonFunction(resetPlayerCreation)
     
 
     --テーブルおよびブロックの画像拡大率
@@ -110,6 +133,8 @@ function PlayerCreationGUI:update(dt)
     PlayerCreationGUI.squareBox:update(dt)
     PlayerCreationGUI.makePlayerButton:update(dt)
     PlayerCreationGUI.deletePlayerButton:update(dt)
+    PlayerCreationGUI.resetPlayerButton:update(dt)
+
 end
 
 function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
@@ -162,6 +187,7 @@ function PlayerCreationGUI:draw()
     PlayerCreationGUI.squareBox:draw()
     PlayerCreationGUI.makePlayerButton:draw()
     PlayerCreationGUI.deletePlayerButton:draw()
+    PlayerCreationGUI.resetPlayerButton:draw()
     
     PlayerCreationGUI:drawTable()
     PlayerCreationGUI:drawBlock()

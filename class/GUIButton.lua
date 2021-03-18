@@ -25,6 +25,11 @@ function GUIButton:init()
     self.state = 'neutral'
 
     self.buttonFunction = nil
+    --ボタン上のテキストの誤差修正変数
+    self.textOffset = {}
+    self.textOffset.x = 0
+    self.textOffset.neutral = -5
+    self.textOffset.pushY = 2
 end
 
 function GUIButton:setButtonFunction(func)
@@ -50,12 +55,12 @@ function GUIButton:drawButton()
     if self:isTouched() then
         love.graphics.draw(BlockBox.image.pushButton,self.x, self.y,0,self.buttonRate.x,self.buttonRate.y)
         love.graphics.setColor(0,0,0,1)
-        love.graphics.print(self.text, BlockBox.font.pixel12B, self.x + self.width/4, self.y + self.height/4 - 3,
+        love.graphics.print(self.text, BlockBox.font.pixel12B, self.x + self.width/4 + self.textOffset.x, self.y + self.height/4 + self.textOffset.neutral + self.textOffset.pushY,
         0, self.textSize, self.textSize)
     else
         love.graphics.draw(BlockBox.image.neutralButton,self.x, self.y,0,self.buttonRate.x,self.buttonRate.y)
         love.graphics.setColor(0,0,0,1)
-        love.graphics.print(self.text, BlockBox.font.pixel12B, self.x + self.width/4, self.y + self.height/4 - 5,
+        love.graphics.print(self.text, BlockBox.font.pixel12B, self.x + self.width/4 + self.textOffset.x, self.y + self.height/4 + self.textOffset.neutral,
         0, self.textSize, self.textSize)
     end
     love.graphics.setColor(1,1,1,1)
