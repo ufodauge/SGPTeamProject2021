@@ -5,33 +5,56 @@ PlayerCreationGUI.image = {}
 PlayerCreationGUI.image.background = love.graphics.newImage('resource/GUIBackground.png')
 PlayerCreationGUI.image.table = love.graphics.newImage('resource/flame.png')
 PlayerCreationGUI.image.selectedTable = love.graphics.newImage('resource/selectedTable.png')
-PlayerCreationGUI.image.circle = love.graphics.newImage('resource/circle40.png')
-PlayerCreationGUI.image.triangle = love.graphics.newImage('resource/triangle40.png')
-PlayerCreationGUI.image.square = love.graphics.newImage('resource/square40.png')
-PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/protagonist_take1.png')
+PlayerCreationGUI.image.circle = love.graphics.newImage('resource/circle.png')
+PlayerCreationGUI.image.triangle = love.graphics.newImage('resource/triangle.png')
+PlayerCreationGUI.image.square = love.graphics.newImage('resource/square.png')
+PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/player.png')
+
+-- プレイヤー作成を完了する処理
+local function completePlayerCreation()
+    State.pop()
+    print('complete')
+end
+
+-- プレイヤー作成を破棄する処理
+local function deletePlayerCreation()
+    State.pop()
+    print('delete')
+end
 
 function PlayerCreationGUI:init()
-
     PlayerCreationGUI.buttonsBoard = ButtonsBoard()
 
-    PlayerCreationGUI.circleBox = BlockBox();
+    PlayerCreationGUI.circleBox = BlockBox()
     PlayerCreationGUI.circleBox.x = 475
     PlayerCreationGUI.circleBox.y = 140
     PlayerCreationGUI.circleBox:setBlockImage('circle')
     PlayerCreationGUI.circleBox:addBlock(3)
     -- PlayerCreationGUI.circleBox:setPriority(3)
 
-    PlayerCreationGUI.triangleBox = BlockBox();
+    PlayerCreationGUI.triangleBox = BlockBox()
     PlayerCreationGUI.triangleBox.x = 475
     PlayerCreationGUI.triangleBox.y = 250
     PlayerCreationGUI.triangleBox:setBlockImage('triangle')
     PlayerCreationGUI.triangleBox:addBlock(3)
 
-    PlayerCreationGUI.squareBox = BlockBox();
+    PlayerCreationGUI.squareBox = BlockBox()
     PlayerCreationGUI.squareBox.x = 475
     PlayerCreationGUI.squareBox.y = 360
     PlayerCreationGUI.squareBox:setBlockImage('square')
     PlayerCreationGUI.squareBox:addBlock(3)
+
+    PlayerCreationGUI.makePlayerButton = GUIButton()
+    PlayerCreationGUI.makePlayerButton.x = 600
+    PlayerCreationGUI.makePlayerButton.y = 520
+    PlayerCreationGUI.makePlayerButton.text = 'MAKE'
+    PlayerCreationGUI.makePlayerButton:setButtonFunction(completePlayerCreation)
+
+    PlayerCreationGUI.deletePlayerButton = GUIButton()
+    PlayerCreationGUI.deletePlayerButton.x = 500
+    PlayerCreationGUI.deletePlayerButton.y = 520
+    PlayerCreationGUI.deletePlayerButton.text = 'DEL'
+    PlayerCreationGUI.deletePlayerButton:setButtonFunction(deletePlayerCreation)
 
     -- テーブルおよびブロックの画像拡大率
     PlayerCreationGUI.imageRate = 2
@@ -79,6 +102,8 @@ function PlayerCreationGUI:update(dt)
     PlayerCreationGUI.circleBox:update(dt)
     PlayerCreationGUI.triangleBox:update(dt)
     PlayerCreationGUI.squareBox:update(dt)
+    PlayerCreationGUI.makePlayerButton:update(dt)
+    PlayerCreationGUI.deletePlayerButton:update(dt)
 end
 
 function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
@@ -131,6 +156,8 @@ function PlayerCreationGUI:draw()
     PlayerCreationGUI.circleBox:draw()
     PlayerCreationGUI.triangleBox:draw()
     PlayerCreationGUI.squareBox:draw()
+    PlayerCreationGUI.makePlayerButton:draw()
+    PlayerCreationGUI.deletePlayerButton:draw()
 
     PlayerCreationGUI:drawTable()
     PlayerCreationGUI:drawBlock()

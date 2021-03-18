@@ -82,7 +82,7 @@ function BlockBox:draw()
 end
 
 function BlockBox:drawBox()
-
+    love.graphics.setColor(1, 1, 1, 1)
     if self:isTouched() then
         love.graphics.draw(BlockBox.image.pushButton, self.x, self.y, 0, self.buttonRate.x, self.buttonRate.y)
         love.graphics.draw(self.image.shape, self.x + self.width / 5, self.y + self.height / 4 - 5)
