@@ -11,7 +11,8 @@ function GUIButton:init()
     self.buttonRate.y = 0.6
 
     --ボタンに表示するテキスト
-    self.text = 'hello'
+    self.image = {}
+    self.image.UI = PlayerCreationGUI.image.reset
 
     --テキストの大きさ
     self.textSize = 1.5
@@ -25,11 +26,12 @@ function GUIButton:init()
     self.state = 'neutral'
 
     self.buttonFunction = nil
-    --ボタン上のテキストの誤差修正変数
-    self.textOffset = {}
-    self.textOffset.x = 0
-    self.textOffset.neutral = -5
-    self.textOffset.pushY = 2
+    --ボタン上の画像の誤差修正変数
+    self.imageOffset = {}
+    self.imageOffset.x = 0
+    self.imageOffset.neutral = -5
+    self.imageOffset.pushY = 2
+    self.imageOffset.rate = 1
 end
 
 function GUIButton:setButtonFunction(func)
@@ -54,14 +56,16 @@ function GUIButton:drawButton()
     love.graphics.setColor(1,1,1,1)
     if self:isTouched() then
         love.graphics.draw(BlockBox.image.pushButton,self.x, self.y,0,self.buttonRate.x,self.buttonRate.y)
-        love.graphics.setColor(0,0,0,1)
-        love.graphics.print(self.text, BlockBox.font.pixel12B, self.x + self.width/4 + self.textOffset.x, self.y + self.height/4 + self.textOffset.neutral + self.textOffset.pushY,
-        0, self.textSize, self.textSize)
+        --love.graphics.setColor(0,0,0,1)
+        -- love.graphics.print(self.text, BlockBox.font.pixel12B, self.x + self.width/4 + self.imageOffset.x, self.y + self.height/4 + self.imageOffset.neutral + self.imageOffset.pushY,
+        -- 0, self.textSize, self.textSize)
+        love.graphics.draw(self.image.UI, self.x + self.width/4 + self.imageOffset.x, self.y + self.height/4 + self.imageOffset.neutral + self.imageOffset.pushY, 0, self.imageOffset.rate, self.imageOffset.rate)
     else
         love.graphics.draw(BlockBox.image.neutralButton,self.x, self.y,0,self.buttonRate.x,self.buttonRate.y)
-        love.graphics.setColor(0,0,0,1)
-        love.graphics.print(self.text, BlockBox.font.pixel12B, self.x + self.width/4 + self.textOffset.x, self.y + self.height/4 + self.textOffset.neutral,
-        0, self.textSize, self.textSize)
+        --love.graphics.setColor(0,0,0,1)
+        -- love.graphics.print(self.text, BlockBox.font.pixel12B, self.x + self.width/4 + self.imageOffset.x, self.y + self.height/4 + self.imageOffset.neutral,
+        -- 0, self.textSize, self.textSize)
+        love.graphics.draw(self.image.UI, self.x + self.width/4 + self.imageOffset.x, self.y + self.height/4 + self.imageOffset.neutral, 0, self.imageOffset.rate, self.imageOffset.rate)
     end
     love.graphics.setColor(1,1,1,1)
 end
