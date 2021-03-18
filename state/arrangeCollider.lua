@@ -10,6 +10,7 @@ function arrangeCollider:enter(from, infoTable)
 
     mouseManager = MouseManager()
     playerCreationGUI = PlayerCreationGUI()
+    playerCreationGUI:setBlock(infoTable)
 
 end
 

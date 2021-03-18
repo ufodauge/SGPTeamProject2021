@@ -38,6 +38,8 @@ local function resetPlayerCreation()
     end
 end
 
+
+
 function PlayerCreationGUI:init()
     PlayerCreationGUI.buttonsBoard = ButtonsBoard()
 
@@ -45,19 +47,16 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.circleBox.x = 475
     PlayerCreationGUI.circleBox.y = 140
     PlayerCreationGUI.circleBox:setBlockImage('circle')
-    PlayerCreationGUI.circleBox:addBlock(3)
 
     PlayerCreationGUI.triangleBox = BlockBox()
     PlayerCreationGUI.triangleBox.x = 475
     PlayerCreationGUI.triangleBox.y = 250
     PlayerCreationGUI.triangleBox:setBlockImage('triangle')
-    PlayerCreationGUI.triangleBox:addBlock(3)
 
     PlayerCreationGUI.squareBox = BlockBox()
     PlayerCreationGUI.squareBox.x = 475
     PlayerCreationGUI.squareBox.y = 360
     PlayerCreationGUI.squareBox:setBlockImage('square')
-    PlayerCreationGUI.squareBox:addBlock(3)
 
     PlayerCreationGUI.makePlayerButton = GUIButton()
     PlayerCreationGUI.makePlayerButton.x = 675
@@ -79,8 +78,6 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.resetPlayerButton.textOffset.x = -3
     PlayerCreationGUI.resetPlayerButton:setButtonFunction(resetPlayerCreation)
     
-
-
     -- テーブルおよびブロックの画像拡大率
     PlayerCreationGUI.imageRate = 2
 
@@ -117,6 +114,11 @@ function PlayerCreationGUI:init()
 end
 
 function PlayerCreationGUI:enter()
+end
+
+function PlayerCreationGUI:setBlock(infoTable)
+    PlayerCreationGUI.circleBox:addBlock(infoTable.circle)
+    PlayerCreationGUI.squareBox:addBlock(infoTable.square)
 end
 
 function PlayerCreationGUI:update(dt)
@@ -272,7 +274,13 @@ function PlayerCreationGUI:swapMouseandTable(i)
 end
 
 function PlayerCreationGUI:delete()
+    PlayerCreationGUI.buttonsBoard:delete()
     playerCreationGUI.circleBox:delete()
+    playerCreationGUI.triangleBox:delete()
+    playerCreationGUI.squareBox:delete()
+    PlayerCreationGUI.makePlayerButton:delete()
+    PlayerCreationGUI.deletePlayerButton:delete()
+    PlayerCreationGUI.resetPlayerButton:delete()
     self = nil
 end
 
