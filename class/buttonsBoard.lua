@@ -5,8 +5,8 @@ ButtonsBoard.image.buttonsBoard = love.graphics.newImage('resource/ButtonsFlame.
 
 function ButtonsBoard:init()
     self.super:init(self)
-    --self:setPriority(2)
-    
+    -- self:setPriority(2)
+
     self.x = 450
     self.y = 100
 end
@@ -15,7 +15,7 @@ function ButtonsBoard:update(dt)
 end
 
 function ButtonsBoard:draw()
-    love.graphics.draw(ButtonsBoard.image.buttonsBoard,self.x, self.y)
+    love.graphics.draw(ButtonsBoard.image.buttonsBoard, self.x, self.y)
 end
 
 function ButtonsBoard:delete()

@@ -58,8 +58,8 @@ MouseManager = require 'class.mouseManager'
 PlayerCreationGUI = require 'class.playerCreationGUI'
 GUIButton = require 'class.GUIButton'
 BlockBox = require 'class.BlockBox'
-ButtonsBoard = require 'class.buttonsBoard'
 BackGround = require 'class.BackGround'
+ButtonsBoard = require 'class.buttonsBoard'
 
 function love.load()
     -- デバッグモードの有効化の際は true を渡すこと

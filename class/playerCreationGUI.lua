@@ -10,14 +10,16 @@ PlayerCreationGUI.image.triangle = love.graphics.newImage('resource/triangle.png
 PlayerCreationGUI.image.square = love.graphics.newImage('resource/square.png')
 PlayerCreationGUI.image.playerCore = love.graphics.newImage('resource/player.png')
 
---プレイヤー作成を完了する処理
+-- プレイヤー作成を完了する処理
 local function completePlayerCreation()
-    print('complete')
+    State.pop()
+    --print('complete')
 end
 
---プレイヤー作成を破棄する処理
+-- プレイヤー作成を破棄する処理
 local function deletePlayerCreation()
-    print('delete')
+    State.pop()
+    --print('delete')
 end
 
 --プレイヤー作成をリセットする処理
@@ -78,22 +80,23 @@ function PlayerCreationGUI:init()
     PlayerCreationGUI.resetPlayerButton:setButtonFunction(resetPlayerCreation)
     
 
-    --テーブルおよびブロックの画像拡大率
+
+    -- テーブルおよびブロックの画像拡大率
     PlayerCreationGUI.imageRate = 2
-    
-    --プレイヤーを配置できるテーブルのサイズ
+
+    -- プレイヤーを配置できるテーブルのサイズ
     PlayerCreationGUI.max_tableSize_x = 4
     PlayerCreationGUI.max_tableSize_y = 3
 
-    --テーブル幅
+    -- テーブル幅
     PlayerCreationGUI.tableWidth = 40 * PlayerCreationGUI.imageRate
     PlayerCreationGUI.tableHeight = 40 * PlayerCreationGUI.imageRate
 
-    --テーブルの原点座標
+    -- テーブルの原点座標
     PlayerCreationGUI.table_x = (400 - PlayerCreationGUI.tableWidth * PlayerCreationGUI.max_tableSize_x) / 2 - PlayerCreationGUI.tableWidth
     PlayerCreationGUI.table_y = (600 - PlayerCreationGUI.tableHeight * PlayerCreationGUI.max_tableSize_y) / 2 - PlayerCreationGUI.tableHeight
 
-    --マウスの状態
+    -- マウスの状態
     PlayerCreationGUI.state = 'neutral'
 
     -- for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
@@ -101,30 +104,23 @@ function PlayerCreationGUI:init()
     -- ..'y: '..PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * math.floor((i-1) / PlayerCreationGUI.max_tableSize_x))
     -- end
 
-    PlayerCreationGUI.creationTable = {
-        {
-            x = 0,
-            y = 0,
-            type = 'empty'
-        }
-    }
+    PlayerCreationGUI.creationTable = {{x = 0, y = 0, type = 'empty'}}
     for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
         PlayerCreationGUI.creationTable[i] = PlayerCreationGUI.creationTable[i] or {}
-        PlayerCreationGUI.creationTable[i].x = ((i-1) % PlayerCreationGUI.max_tableSize_x) + 1
-        PlayerCreationGUI.creationTable[i].y = (math.floor((i-1) / PlayerCreationGUI.max_tableSize_x)) + 1
+        PlayerCreationGUI.creationTable[i].x = ((i - 1) % PlayerCreationGUI.max_tableSize_x) + 1
+        PlayerCreationGUI.creationTable[i].y = (math.floor((i - 1) / PlayerCreationGUI.max_tableSize_x)) + 1
         PlayerCreationGUI.creationTable[i].type = 'empty'
     end
 
-    PlayerCreationGUI.creationTable[
-        PlayerCreationGUI.max_tableSize_x * (PlayerCreationGUI.max_tableSize_y - 1) + math.floor(PlayerCreationGUI.max_tableSize_x/2)
-        ].type = 'playerCore'
+    PlayerCreationGUI.creationTable[PlayerCreationGUI.max_tableSize_x * (PlayerCreationGUI.max_tableSize_y - 1) +
+        math.floor(PlayerCreationGUI.max_tableSize_x / 2)].type = 'playerCore'
 end
 
 function PlayerCreationGUI:enter()
 end
 
 function PlayerCreationGUI:update(dt)
-    
+
     if mouseManager.isReleased then
         PlayerCreationGUI:ReleaseMouse()
     end
@@ -139,14 +135,15 @@ end
 
 function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関数
 
-    if PlayerCreationGUI.catchedItem == 'empty' then --自分が何も持っていないとき
+    if PlayerCreationGUI.catchedItem == 'empty' then -- 自分が何も持っていないとき
         for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
-            if PlayerCreationGUI:isTouchedTable(i) and PlayerCreationGUI.creationTable[i].type ~= 'empty' and PlayerCreationGUI.creationTable[i].type ~= 'playerCore' then
+            if PlayerCreationGUI:isTouchedTable(i) and PlayerCreationGUI.creationTable[i].type ~= 'empty' and PlayerCreationGUI.creationTable[i].type ~=
+                'playerCore' then
                 PlayerCreationGUI:swapMouseandTable(i)
                 break
             end
         end
-    elseif PlayerCreationGUI.catchedItem ~= 'empty'then --自分がブロックを持っているとき
+    elseif PlayerCreationGUI.catchedItem ~= 'empty' then -- 自分がブロックを持っているとき
         local deleteBlock = true
         local blockType = PlayerCreationGUI.catchedItem
         for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
@@ -154,7 +151,8 @@ function PlayerCreationGUI:ReleaseMouse() -- マウスを離したときの関�
                 PlayerCreationGUI:setItemInTable(i)
                 deleteBlock = false
                 break
-            elseif PlayerCreationGUI:isTouchedTable(i) and PlayerCreationGUI.creationTable[i].type ~= 'empty' and PlayerCreationGUI.creationTable[i].type ~= 'playerCore' then
+            elseif PlayerCreationGUI:isTouchedTable(i) and PlayerCreationGUI.creationTable[i].type ~= 'empty' and PlayerCreationGUI.creationTable[i].type ~=
+                'playerCore' then
                 PlayerCreationGUI:swapMouseandTable(i)
                 deleteBlock = false
                 break
@@ -179,7 +177,7 @@ end
 
 function PlayerCreationGUI:draw()
 
-    love.graphics.draw(PlayerCreationGUI.image.background,0,0)
+    love.graphics.draw(PlayerCreationGUI.image.background, 0, 0)
 
     PlayerCreationGUI.buttonsBoard:draw()
     PlayerCreationGUI.circleBox:draw()
@@ -188,24 +186,22 @@ function PlayerCreationGUI:draw()
     PlayerCreationGUI.makePlayerButton:draw()
     PlayerCreationGUI.deletePlayerButton:draw()
     PlayerCreationGUI.resetPlayerButton:draw()
-    
+
     PlayerCreationGUI:drawTable()
     PlayerCreationGUI:drawBlock()
 
     PlayerCreationGUI:drawMouseItem()
-    
-    --love.graphics.draw(PlayerCreationGUI.image.circle,0,0)
-    
+
+    -- love.graphics.draw(PlayerCreationGUI.image.circle,0,0)
+
 end
 
 function PlayerCreationGUI:drawTable()
 
     for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
-        love.graphics.draw(PlayerCreationGUI.image.table,
-            PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
-            PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y,
-            0,PlayerCreationGUI.imageRate,PlayerCreationGUI.imageRate
-            )
+        love.graphics.draw(PlayerCreationGUI.image.table, PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
+                           PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y, 0, PlayerCreationGUI.imageRate,
+                           PlayerCreationGUI.imageRate)
     end
 end
 
@@ -214,35 +210,28 @@ function PlayerCreationGUI:drawBlock()
 
     for i = 1, PlayerCreationGUI.max_tableSize_x * PlayerCreationGUI.max_tableSize_y, 1 do
         if PlayerCreationGUI.creationTable[i].type == 'circle' then
-            love.graphics.draw(PlayerCreationGUI.image.circle,
-            PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
-            PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y,
-            0,PlayerCreationGUI.imageRate,PlayerCreationGUI.imageRate
-            )
+            love.graphics.draw(PlayerCreationGUI.image.circle, PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
+                               PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y, 0, PlayerCreationGUI.imageRate,
+                               PlayerCreationGUI.imageRate)
         elseif PlayerCreationGUI.creationTable[i].type == 'triangle' then
             love.graphics.draw(PlayerCreationGUI.image.triangle,
-            PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
-            PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y,
-            0,PlayerCreationGUI.imageRate,PlayerCreationGUI.imageRate
-            )
+                               PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
+                               PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y, 0, PlayerCreationGUI.imageRate,
+                               PlayerCreationGUI.imageRate)
         elseif PlayerCreationGUI.creationTable[i].type == 'square' then
-            love.graphics.draw(PlayerCreationGUI.image.square,
-            PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
-            PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y,
-            0,PlayerCreationGUI.imageRate,PlayerCreationGUI.imageRate
-            )
+            love.graphics.draw(PlayerCreationGUI.image.square, PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
+                               PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y, 0, PlayerCreationGUI.imageRate,
+                               PlayerCreationGUI.imageRate)
         elseif PlayerCreationGUI.creationTable[i].type == 'playerCore' then
             love.graphics.draw(PlayerCreationGUI.image.playerCore,
-            PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
-            PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y,
-            0,PlayerCreationGUI.imageRate,PlayerCreationGUI.imageRate
-            )
+                               PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
+                               PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y, 0, PlayerCreationGUI.imageRate,
+                               PlayerCreationGUI.imageRate)
         elseif PlayerCreationGUI:isTouchedTable(i) then
             love.graphics.draw(PlayerCreationGUI.image.selectedTable,
-            PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
-            PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y,
-            0,PlayerCreationGUI.imageRate,PlayerCreationGUI.imageRate
-            )
+                               PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x,
+                               PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y, 0, PlayerCreationGUI.imageRate,
+                               PlayerCreationGUI.imageRate)
         end
     end
 
@@ -251,26 +240,24 @@ end
 
 function PlayerCreationGUI:drawMouseItem()
     if PlayerCreationGUI.catchedItem == 'circle' then
-        love.graphics.draw(PlayerCreationGUI.image.circle, mouseManager.x - 15, mouseManager.y - 15,
-            0, PlayerCreationGUI.imageRate/2, PlayerCreationGUI.imageRate/2
-            )
+        love.graphics.draw(PlayerCreationGUI.image.circle, mouseManager.x - 15, mouseManager.y - 15, 0, PlayerCreationGUI.imageRate / 2,
+                           PlayerCreationGUI.imageRate / 2)
     elseif PlayerCreationGUI.catchedItem == 'triangle' then
-            love.graphics.draw(PlayerCreationGUI.image.triangle, mouseManager.x - 15, mouseManager.y - 15,
-            0, PlayerCreationGUI.imageRate/2, PlayerCreationGUI.imageRate/2
-            )
+        love.graphics.draw(PlayerCreationGUI.image.triangle, mouseManager.x - 15, mouseManager.y - 15, 0, PlayerCreationGUI.imageRate / 2,
+                           PlayerCreationGUI.imageRate / 2)
     elseif PlayerCreationGUI.catchedItem == 'square' then
-        love.graphics.draw(PlayerCreationGUI.image.square, mouseManager.x - 15, mouseManager.y - 15,
-        0, PlayerCreationGUI.imageRate/2, PlayerCreationGUI.imageRate/2
-        )
+        love.graphics.draw(PlayerCreationGUI.image.square, mouseManager.x - 15, mouseManager.y - 15, 0, PlayerCreationGUI.imageRate / 2,
+                           PlayerCreationGUI.imageRate / 2)
     end
     love.graphics.setColor(1, 1, 1, 1)
 end
 
 function PlayerCreationGUI:isTouchedTable(i)
-    return  (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x) < mouseManager.x and
-            (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x + PlayerCreationGUI.tableWidth) > mouseManager.x and
-            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y) < mouseManager.y and
-            (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y + PlayerCreationGUI.tableHeight) > mouseManager.y 
+    return (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x) < mouseManager.x and
+               (PlayerCreationGUI.table_x + PlayerCreationGUI.tableWidth * PlayerCreationGUI.creationTable[i].x + PlayerCreationGUI.tableWidth) > mouseManager.x and
+               (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y) < mouseManager.y and
+               (PlayerCreationGUI.table_y + PlayerCreationGUI.tableHeight * PlayerCreationGUI.creationTable[i].y + PlayerCreationGUI.tableHeight) >
+               mouseManager.y
 end
 
 function PlayerCreationGUI:setItemInTable(i)
